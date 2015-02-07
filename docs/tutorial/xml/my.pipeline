@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+
+	<!-- register dlls -->
+	<register>
+		<load name="ssiioput.dll"/>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	
+	<!-- move console -->
+	<framework console="true" cpos="0,400,800,400"/>
+	
+	<!-- arrange graphs -->
+	<painter arrange="true" apos="3,1,0,0,800,400"/>
+	
+	<!-- sensor + provider + filter -->		
+	<sensor create="ssi_sensor_Mouse" option="mouse" mask="1">
+		<provider channel="button" pin="button"/>
+		<provider channel="cursor" pin="cursor">
+			<transformer create="ssi_filter_Selector" indices="1" option="select"/>
+		</provider>
+	</sensor>
+	
+	<!-- transformer -->
+	<transformer create="ssi_filter_Derivative" option="derivative">		
+		<input pin="cursor" frame="0.2s" delta="0"/>			
+		<output pin="cursor_d"/>			
+	</transformer>
+	
+	<!-- consumer -->
+	<consumer create="ssi_consumer_SignalPainter" option="painter" size="10.0" name="cursor">
+		<input pin="cursor" frame="0.2s"/>		
+	</consumer>
+	
+	<!-- include -->
+	<include name="my2"/>
+	
+	<!-- event sender -->	
+	<consumer create="ssi_consumer_ZeroEventSender" option="zerotr" mindur="0.2" ename="pressed" sname="button">
+		<input pin="button" frame="0.25s"/>		
+	</consumer>		
+	
+	<!-- consumer + trigger + transformer -->	
+	<consumer create="ssi_consumer_SignalPainter" option="painter_tr" name="cursor (tr)">
+		<input pin="cursor" listen="pressed@button">						
+			<transformer create="ssi_filter_Derivative" option="derivative"/>
+		</input>
+	</consumer>
+	
+	<!-- event monitor listener -->
+	<object create="ssi_listener_EventMonitor" mpos="800,0,400,400">
+		<listen address="pressed@button"/>									
+	</object>
+	
+</pipeline>

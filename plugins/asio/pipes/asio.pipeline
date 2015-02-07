@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<pipeline>
+
+	<register>
+		<load name="ssiasio.dll" />
+		<load name="ssigraphic.dll" />
+	</register>	
+	
+	<!-- set framework options -->
+	<framework monitor="true" mpos="400,0,400,400" console="true" cpos="400,400,400,400"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,1,0,0,400,800"/>
+	
+	<!-- asio sensor -->
+	<sensor create="ssi_sensor_AudioAsio" channels="0,0,0" option="asio">
+		<provider channel="audio" pin="audio"/>
+	</sensor>
+	
+	<!-- visalization -->
+	<consumer create="ssi_consumer_SignalPainter"  size="10" name="audio" type="2">
+		<input pin="audio" frame="0.2s" delta="0"/>
+	</consumer>
+	
+</pipeline>

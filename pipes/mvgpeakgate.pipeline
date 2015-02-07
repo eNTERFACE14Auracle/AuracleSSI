@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!-- register dlls -->
+	<register>
+		<load name="ssiioput.dll"/>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="400,300,400,300"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,3,0,0,400,600"/>	
+	
+	<!-- mouse sensor -->
+	<sensor create="ssi_sensor_Mouse" mask="1" sr="100.0" scale="true">
+		<provider channel="cursor" pin="cursor"/>
+	</sensor>
+	
+	<!-- derivative -->
+	<transformer create="ssi_filter_Derivative" names="1st">
+		<input pin="cursor" frame="0.05s"/>
+		<output pin="speed"/>
+	</transformer>
+	<transformer create="ssi_feature_Energy" global="true">
+		<input pin="speed" frame="0.05s"/>
+		<output pin="speedenergy"/>
+	</transformer>	
+	
+	<!-- moving peak gate
+	
+	Applies an adaptive threshold to the input signal. The threshold
+	is derived from the moving average and variance.
+	
+	To test the filter move the mouse slowly around. You will see
+	that the output signal is zero. After the initialization phase 
+	you may do quick movements with the	mouse and notice that such
+	movements pass the threshold, which is continuously updated.
+	
+	-->
+	<transformer create="ssi_filter_MvgPeakGate" method="1" win="10.0" format="3" thres="2" mstd="4.0" monitor="true" mpos="800,300,280,280">
+		<input pin="speedenergy" frame="0.2s"/>
+		<output pin="mvgpeakgate"/>
+	</transformer>
+	
+	<!-- detect quick movments -->
+	<consumer create="ssi_consumer_ZeroEventSender" mindur="0.0" maxdur="2.0" sname="cursor" ename="move">
+		<input pin="mvgpeakgate" frame="0.5s" />		
+	</consumer>		
+	
+	<!-- visualization -->
+	<consumer create="ssi_consumer_SignalPainter" name="cursor" size="10.0">
+		<input pin="cursor" frame="0.2s" />		
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="speed" size="10.0">
+		<input pin="speedenergy" frame="0.2s" />		
+	</consumer>		
+	<consumer create="ssi_consumer_SignalPainter" name="gate" size="10.0">
+		<input pin="mvgpeakgate" frame="0.2s" />		
+	</consumer>	
+	<listener create="ssi_listener_EventMonitor" mpos="400,0,600,300">
+		<input listen="move@cursor" span="20000" />
+	</listener>
+	
+</pipeline>

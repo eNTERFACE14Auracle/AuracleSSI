@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!-- register dlls -->
+	<register>
+		<load name="ssiioput.dll"/>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="400,0,400,600"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,2,0,0,400,600"/>	
+	
+	<!-- mouse sensor 
+	
+	By setting mask to 1 we instruct the sensor to listen to the
+	left mouse buttons. As long as the left mouse buttons is
+	pressed the cursor stream will be set to 1, 0 otherwise.
+	
+	-->
+	<sensor create="ssi_sensor_Mouse" mask="1">
+		<provider channel="button" pin="button" />
+		<provider channel="cursor" pin="cursor"/>
+	</sensor>
+	
+	<!-- visualization -->
+	<consumer create="ssi_consumer_SignalPainter" name="cursor" size="10.0">
+		<input pin="cursor" frame="0.2s" />		
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="button" size="10.0">
+		<input pin="button" frame="0.2s" />		
+	</consumer>	
+	
+	<!-- storage 
+	
+	Two files will be created: cursor.stream, a xml file containing meta
+	information such as sample rate, sample dimension, etc. and cursor.stream~
+	containing the sample data (here in ascii format since type is set to 1).
+	
+	-->
+	<consumer create="ssi_consumer_FileWriter" path="cursor" type="1">
+		<input pin="cursor" frame="0.2s" />
+	</consumer>
+	<consumer create="ssi_consumer_FileWriter" path="cursor_b" type="0">
+		<input pin="cursor" frame="0.2s" />
+	</consumer>
+	
+</pipeline>

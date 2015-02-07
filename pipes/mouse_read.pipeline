@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!--
+	
+	NOTE: run mouse.pipeline first to generate a file
+	
+	-->	
+	
+	<!-- register dlls -->
+	<register>
+		<load name="ssiioput.dll"/>		
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="400,0,400,600"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,1,0,0,400,600"/>	
+	
+	<!-- file reader -->
+	<sensor create="ssi_sensor_FileReader" path="cursor_b" blockInSamples="5" offsetInSamples="0" cutoffInSamples="0">
+		<provider channel="file" pin="cursor" sync="0" check="0"/>		
+	</sensor>
+	
+	<!-- file writer -->
+	<consumer create="ssi_consumer_FileWriter" path="cursor-check" type="1">
+		<input pin="cursor" frame="0.2s" />
+	</consumer>
+	
+	<!-- visualization -->
+	<consumer create="ssi_consumer_SignalPainter" name="cursor" size="10.0">
+		<input pin="cursor" frame="0.2s" />		
+	</consumer>	
+	
+</pipeline>

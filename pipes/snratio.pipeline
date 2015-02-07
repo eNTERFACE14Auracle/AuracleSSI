@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<register>
+		<load name="ssigraphic.dll" />
+		<load name="ssisignal.dll"/>
+		<load name="ssiaudio.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="400,0,400,600"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,2,0,0,400,600"/>
+	
+	<!-- audio sensor -->
+	<sensor create="ssi_sensor_Audio" option="audio" scale="false">
+		<provider channel="audio" pin="audio"/>
+	</sensor>
+	
+	<!-- signal-to-noise ratio -->
+	<transformer create="ssi_feature_SNRatio">
+		<input pin="audio" frame="0.01s"/>
+		<output pin="snr"/>
+	</transformer>
+	
+	<!-- visualization -->	
+	<consumer create="ssi_consumer_SignalPainter" name="audio" size="10" type="2">
+		<input pin="audio" frame="0.02s" delta="0"/>
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="signal-to-noise" size="10">
+		<input pin="snr" frame="0.02s" />
+	</consumer>
+	
+</pipeline>

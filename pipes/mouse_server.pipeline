@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!-- register dlls -->
+	<register>
+		<load name="ssiioput.dll"/>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	
+	<!-- set framework options 
+	
+	Sends a a sync package to other pipelines (clients) in the network. 
+	Use this function synchronize pipelines on multiple machines. Start client
+	pipelines first, then the server. 
+	
+	-->
+	<framework console="true" cpos="0,400,400,400" sync="true" sport="7777"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,1,0,0,400,400"/>	
+	
+	<!-- sensor -->
+	<sensor create="ssi_sensor_Mouse" mask="1">
+		<provider channel="button" pin="button" />
+		<provider channel="cursor" pin="cursor"/>
+	</sensor>
+	
+	<!-- consumer -->
+	<consumer create="ssi_consumer_SignalPainter" size="10.0">
+		<input pin="cursor" frame="0.2s" />		
+	</consumer>
+	
+	<!-- file writer -->
+	<consumer create="ssi_consumer_FileWriter" path="mouse_server">
+		<input pin="cursor" frame="0.25s"/>
+	</consumer>
+	
+</pipeline>

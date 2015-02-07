@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!-- register dlls -->
+	<register>
+		<load name="ssiioput.dll"/>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="400,300,400,300"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,2,0,0,400,600"/>	
+	
+	<!-- mouse sensor -->
+	<sensor create="ssi_sensor_Mouse" mask="1">
+		<provider channel="button" pin="button" />
+		<provider channel="cursor" pin="cursor"/>
+	</sensor>
+	
+	<!-- detect button events 
+	
+	To trigger an event press the left mouse button. Since
+	eager option is set an event will immediatelly appear on the 
+	event board. When you release the mouse button after pressing
+	at least 0.5s another event will be sent marked	as complete.
+	If you press the mouse button for more than 2.0s before releasing
+	it you will	notice additional incomplete events. Note that
+	events belonging to the same action share a unique event id.
+	
+	-->
+	<consumer create="ssi_consumer_ZeroEventSender" mindur="0.5" maxdur="2.0" sname="button" ename="pressed" eall="true" eager="true">
+		<input pin="button" frame="0.1s" />		
+	</consumer>		
+	
+	<!-- visualization -->
+	<consumer create="ssi_consumer_SignalPainter" name="cursor" size="10.0">
+		<input pin="cursor" frame="0.2s" />		
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="button" size="10.0">
+		<input pin="button" frame="0.2s" />		
+	</consumer>	
+	<listener create="ssi_listener_EventMonitor" mpos="400,0,600,300">
+		<input listen="pressed@button" span="20000" />
+	</listener>
+	
+	<!-- storage 
+	
+	Stores detected events in a xml file 'cursor.events'.
+	
+	-->
+	<listener create="ssi_listener_FileEventWriter" path="button">
+		<input listen="pressed@button"/>
+	</listener>
+	
+	<consumer create="ssi_consumer_FileWriter" path="cursor" type="1">
+		<input pin="cursor" frame="0.2s" />
+	</consumer>
+	
+	<!-- sender 
+	
+	Sends detected events to a socket port
+	
+	-->
+	<listener create="ssi_listener_SocketEventWriter" port="9999" type="0" xml="true">
+		<input listen="pressed@button"/>
+	</listener>		
+	
+</pipeline>

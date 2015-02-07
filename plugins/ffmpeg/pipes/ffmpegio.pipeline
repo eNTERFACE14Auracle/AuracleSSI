@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<pipeline>
+
+	<register>
+		<load name="ssigraphic.dll" />
+		<load name="ssiioput.dll" />
+		<load name="ssiffmpeg.dll" />
+		<load name="ssiaudio.dll" />
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="0,480,640,240" sync="false" slisten="true" sport="6666"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,1,0,0,640,480"/>
+	
+	<!-- read -->
+	<sensor create="ssi_sensor_FFMPEGReader" url="dummy.mp4" wait="true">		
+		<provider channel="video" pin="video" size="2.0"/>
+		<provider channel="audio" pin="audio" size="2.0"/>
+	</sensor>
+	
+	<!-- write -->
+	<consumer create="ssi_consumer_FFMPEGWriter" url="copy.mp4">
+		<input pin="video" frame="1"/>
+		<xinput size="1">
+			<input pin="audio"/>
+		</xinput>
+	</consumer>	
+	
+	<!-- write -->
+	<consumer create="ssi_consumer_FFMPEGWriter" url="copy.mpg">
+		<input pin="video" frame="1" />
+		<xinput size="1">
+			<input pin="audio"/>
+		</xinput>
+	</consumer>		
+	
+	<!-- write -->
+	<consumer create="ssi_consumer_FFMPEGWriter" url="copy.h264">
+		<input pin="video" frame="1" />
+	</consumer>		
+
+	<!-- write -->
+	<consumer create="ssi_consumer_FFMPEGWriter" url="copy.avi">
+		<input pin="video" frame="1" />
+		<xinput size="1">
+			<input pin="audio"/>
+		</xinput>
+	</consumer>			
+	
+	<!-- visualize -->	
+	<consumer create="ssi_consumer_VideoPainter" name="video">
+		<input pin="video" frame="1" delta="0"/>
+	</consumer>
+	
+	<!-- playback -->
+	<consumer create="ssi_consumer_AudioPlayer" option="aplayer">
+		<input pin="audio" frame="0.01s"/>
+	</consumer>		
+	
+</pipeline>

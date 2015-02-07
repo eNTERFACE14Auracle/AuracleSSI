@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!-- register dlls -->
+	<register>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="400,0,400,600"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,3,0,0,400,600"/>	
+	
+	<!-- mouse sensor -->
+	<sensor create="ssi_sensor_Mouse" sr="100.0">
+		<provider channel="cursor" pin="cursor"/>
+	</sensor>
+	
+	<!-- lowpass 
+	
+	Applies a low- and a highpass filter with a cutoff frequency of 1 Hz.
+	The effect can be best seen if you move the mouse cursor back and forth
+	at different speeds.
+	
+	-->
+	<transformer create="ssi_filter_Butfilt" type="0" order="5" norm="false" low="1.0" zero="true">
+		<input pin="cursor" frame="0.1s"/>
+		<output pin="low"/>
+	</transformer>
+	<transformer create="ssi_filter_Butfilt" type="1" order="5" norm="false" high="1.0" zero="true">
+		<input pin="cursor" frame="0.1s"/>
+		<output pin="high"/>
+	</transformer>	
+
+	<!-- visualization -->
+	<consumer create="ssi_consumer_SignalPainter" name="cursor" size="10.0">
+		<input pin="cursor" frame="0.2s" />		
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="lowpassed" size="10.0">
+		<input pin="low" frame="0.2s" />		
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="highpassed" size="10.0">
+		<input pin="high" frame="0.2s" />		
+	</consumer>
+	
+</pipeline>

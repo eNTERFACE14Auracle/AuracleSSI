@@ -1,0 +1,18 @@
+﻿Build started 19/06/2014 14:51:59.
+     1>Project "C:\Users\Auracle\Documents\openssi-bleedingedge\plugins\ffmpeg\build\test\test.vcxproj" on node 3 (build target(s)).
+     1>c:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.Targets(1200,9): warning : The referenced project '..\dlls\fusion.vcxproj' does not exist.
+     1>InitializeBuildStatus:
+         Creating "Release\Win32\vc10\test.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+       Link:
+         All outputs are up-to-date.
+         test.vcxproj -> C:\Users\Auracle\Documents\openssi-bleedingedge\plugins\ffmpeg\build\Release\test.exe
+       FinalizeBuildStatus:
+         Deleting file "Release\Win32\vc10\test.unsuccessfulbuild".
+         Touching "Release\Win32\vc10\test.lastbuildstate".
+     1>Done Building Project "C:\Users\Auracle\Documents\openssi-bleedingedge\plugins\ffmpeg\build\test\test.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.04

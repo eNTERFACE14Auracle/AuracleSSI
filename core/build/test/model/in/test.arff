@@ -1,0 +1,23 @@
+@RELATION test
+
+@ATTRIBUTE str	  STRING
+@ATTRIBUTE feat1  NUMERIC
+@ATTRIBUTE feat2  NUMERIC
+@ATTRIBUTE feat3  NUMERIC
+@ATTRIBUTE feat4  NUMERIC
+@ATTRIBUTE class  {class1,class2,class3}
+@ATTRIBUTE class2 {c1,c2,c3}
+           
+
+@DATA
+str,5.1,3.5,1.4,0.2,class1,?
+str,4.9,3.0,1.4,0.2,class1,c1
+str,4.7,3.2,1.3,0.2,class2,c2
+str,4.6,3.1,1.5,0.2,?,c2
+str,5.0,3.6,1.4,0.2,class1,?
+str,5.4,3.9,1.7,0.4,class2,c2
+str,4.6,3.4,1.4,0.3,class3,c3
+str,5.0,3.4,1.5,0.2,class1,c1
+str,4.4,2.9,1.4,0.2,class2,c2
+str,4.9,3.1,1.5,0.1,class3,c3
+

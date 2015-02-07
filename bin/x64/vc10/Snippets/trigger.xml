@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Snippet>
+  <Shortcut>trigger</Shortcut>
+  <Declaration>
+    <ID>
+      <Name>name</Name>
+      <Value></Value>
+    </ID>
+  </Declaration>
+  <Code>
+    <![CDATA[<trigger create="$name$">
+		<input pin="" frame=""/>
+		<event name=""/>
+	</trigger>]]>
+  </Code>
+</Snippet>

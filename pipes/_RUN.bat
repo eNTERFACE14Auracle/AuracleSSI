@@ -1,0 +1,1 @@
+..\bin\Win32\vc10\xmlpipe.exe %1

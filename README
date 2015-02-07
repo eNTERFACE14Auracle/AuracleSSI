@@ -1,0 +1,125 @@
+------------------------------------------------------------
+	Social Signal Interpretation (SSI)
+------------------------------------------------------------
+
+(c) 2007-13 University of Augsburg
+	Lab for Human Centered Multimedia
+	support@openssi.net
+	http://openssi.net	 
+	
+	main developer:
+	
+	Johannes Wagner <wagner@hcm-lab.de>
+	Florian Lingenfelser <lingenfelser@hcm-lab.de>
+	Ionut Damian <damian@hcm-lab.de>
+	Tobias Baur <baur@hcm-lab.de>
+	Felix Kistler <kistler@hcm-lab.de>
+	
+Version 0.9
+
+	SSI is published under GNU General Public License
+	see also LICENSE
+	
+------------------------------------------------------------
+	Publication:
+------------------------------------------------------------	
+	
+	J. Wagner, F. Lingenfelser and E. André, "The Social Signal Interpretation Framework (SSI) for Real Time Signal Processing and Recognition", in Proceedings of Interspeech, 2011.
+
+	@inproceedings {wagner11,
+	 author = {Wagner, Johannes and Lingenfelser, Florian and Andr{\'e}, Elisabeth},
+	 location={Florence, Italy},
+	 booktitle={Proc. of Interspeech 2011},
+	 title={The Social Signal Interpretation Framework (SSI) for Real Time Signal Processing and Recognition},
+	 year={2011}
+	}
+	
+------------------------------------------------------------
+	SSI makes use of the following software:
+------------------------------------------------------------
+
+	oscpack -- Open Sound Control packet manipulation library
+	http://www.audiomulch.com/~rossb/code/oscpack	
+	see also LICENSE.OSCPACK
+	
+	KISS FFT -- A mixed-radix Fast Fourier Transform 
+	Copyright (c) 2003-6 Mark Borgerding	
+	see also LICENSE.KISSFFT
+	
+	AVI utilities -- for creating avi files
+	(c) 2002 Lucian Wischik. No restrictions on use.
+	
+	Torch 3.1. -- A machine-learning library
+	Copyright (C) 2003-4 Ronan Collobert - http://www.torch.ch/
+	see also LICENSE.TORCH
+	
+	Dollar$1 Implementation by Baylor Wetzel
+	http://depts.washington.edu/aimgroup/proj/dollar/others/cpp.bw.zip
+	Wobbrock, J.O., Wilson, A.D. and Li, Y. (2007) Gestures without libraries, toolkits
+	or training: A $1 recognizer for user interface prototypes.
+	<http://faculty.washington.edu/wobbrock/pubs/uist-07.1.pdf> Proceedings
+	of the ACM Symposium on User Interface Software and Technology (UIST '07). Newport,
+	Rhode Island (October 7-10, 2007). New York: ACM Press, pp. 159-168.
+	
+	TinyXML -- a simple, small, C++ XML parser
+	copyright (c) 2000-2006 Lee Thomason (www.grinninglizard.com)
+	see also LICENSE.TINYXML
+	
+	Libsvm -- a simple, easy-to-use, and efficient software for SVM
+	Copyright (c) 2000-2010 Chih-Chung Chang and Chih-Jen Lin
+	http://www.csie.ntu.edu.tw/~cjlin/libsvm
+	see also LICENSE.LIBSVM
+	
+	WPF MediaKit -- For webcam, DVD and custom video support in WPF
+	Copyright (c) 2008, Jeremiah Morrill
+	http://wpfmediakit.codeplex.com
+	see also LICENSE.WPFMEDIAKIT	
+	
+	r250, Random number generator by Taygeta
+	http://www.taygeta.com/
+	
+	David Arthur's implementation of the kmeans++ algorithm
+	http://www.stanford.edu/~darthur/kmpp.zip
+	
+	AvalonEdit, WPF-based text editor in SharpDevelop 4.x "Mirador"
+	by Daniel Grunwald, http://www.avalonedit.net
+	see also LICENSE.AVALONEDIT
+	
+	ScintillaNET, a powerful text editing control and a managed wrapper around Scintilla
+	Copyright 2002-2006 by Garrett Serack <gserack@gmail.com>
+	http://scintillanet.codeplex.com/
+	see also LICENSE.SCIENTILLANET
+	
+	ARFF file-reader, a C++ library to parse ARFF files
+	Copyright (C) 2011 Tejaswi <rao.thejaswi@gmail.com>
+	http://ficklemind.blogspot.com/2011/09/arff-file-reader-in-c.html
+	see also LICENSE.ARFFREADER
+	
+	AlgLib, a cross-platform numerical analysis and data processing library
+	ALGLIB® - numerical analysis library, 1999-2012.
+	ALGLIB is a registered trademark of the ALGLIB Project. 
+	see also LICENSE.ALGLIB
+	
+	OpenCV, an open source computer vision and machine learning software library.
+	see also LICENSE.OPENCV
+	
+	ExpressionParser, parser for mathematical expressions
+	Copyright (C) 2007-2011 Jos de Jong, http://www.speqmath.com
+	see also LICENSE.EXPRESSIONPARSER
+	
+	VideoLAN x264, free software library and application for encoding video streams into the H.264/MPEG-4 AVC
+	http://www.videolan.org/developers/x264.html
+	see also LICENSE.X264
+	
+	C++ class for JPEG decompression, Rich Geldreich <richgel99@gmail.com>
+	http://code.google.com/p/jpeg-compressor/
+	Public domain
+	
+	AvalonControlsLibrary, a set of WPF controls that can help WPF developers while developing applications.
+	http://avaloncontrolslib.codeplex.com/
+	see also LICENSE.AVALONCONTROLS
+	
+------------------------------------------------------------
+	Bug report to support@openssi.net
+------------------------------------------------------------
+

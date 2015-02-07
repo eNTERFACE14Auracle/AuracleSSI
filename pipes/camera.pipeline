@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<pipeline>
+
+	<register>
+		<load name="ssigraphic.dll" />
+		<load name="ssicamera.dll" />
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="400,0,400,300"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,1,0,0,400,300"/>
+	
+	<!-- camera sensor -->
+	<sensor create="ssi_sensor_Camera" option="camera">
+		<provider channel="video" pin="video" size="2.0"/>
+	</sensor>
+	
+	<!-- visualization -->	
+	<consumer create="ssi_consumer_VideoPainter" name="camera">
+		<input pin="video" frame="1" delta="0"/>
+	</consumer>
+	
+	<!--storage -->
+	<consumer create="ssi_consumer_CameraWriter" option="camerawriter" path="camera.avi">
+		<input pin="video" frame="1" delta="0"/>
+	</consumer>	
+	
+</pipeline>

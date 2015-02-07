@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<pipeline>
+
+	<!--
+	
+	Combines the content of 'audio.pipeline', 'camera.pipeline' and 'mouse.pipeline'
+	
+	-->
+
+	<include name="camera"/>
+	<include name="audio"/>	
+	<include name="mouse"/>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="200,300,400,300"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,4,0,0,200,600"/>
+	
+	<!-- event detection -->
+	<consumer create="ssi_consumer_ZeroEventSender" mindur="0.5" maxdur="2.0" sname="button" ename="pressed" eall="true" eager="true">
+		<input pin="button" frame="0.1s"/>		
+	</consumer>		
+	
+	<!-- visualization -->
+	<listener create="ssi_listener_EventMonitor" mpos="200,0,600,300">
+		<input listen="pressed@button" span="20000" />
+	</listener>
+	
+	<!-- storage 
+	
+	Stores detected events in a xml file 'cursor.events'.
+	
+	-->
+	<listener create="ssi_listener_FileEventWriter" path="button">
+		<input listen="pressed@button"/>
+	</listener>
+	
+	
+</pipeline>

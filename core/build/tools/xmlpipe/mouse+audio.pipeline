@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	<register>		
+		<load name="ssigraphic.dll"/>		
+	</register>
+	<option create="ssi_consumer_SignalPainter" option="painter">
+		<set name="arrange" value="1,2,2,0,0,800,600"/>
+		<set name="size" value="10.0"/>
+	</option>
+	<include name="mouse"/>
+	<include name="audio"/>
+</pipeline>

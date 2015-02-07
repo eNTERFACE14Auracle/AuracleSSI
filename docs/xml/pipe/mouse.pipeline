@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<pipeline>
+	<register>
+		<load name="ssiioput.dll" />
+		<load name="ssimodel.dll" />
+		<load name="ssigraphic.dll" />
+		<load name="ssisignal.dll" />
+		<load name="ssimouse.dll" />
+	</register>
+	
+	<framework console="true" cpos="400,0,400,600"/>
+	<painter arrange="true" apos="1,2,0,0,400,600"/>
+	
+	<sensor create="ssi_sensor_Mouse" size="0.1" mask="1">
+		<provider channel="cursor" pin="cursor"/>
+		<provider channel="button" pin="button"/>	
+	</sensor>
+	
+	<transformer create="ssi_filter_MvgAvgVar" format="1" win="2">
+		<input pin="cursor" frame="0.2s"/>
+		<output pin="cursor_avg"/>
+	</transformer>
+	
+	<consumer create="ssi_consumer_SignalPainter" size="10.0">
+		<input pin="cursor" frame="0.2s"/>
+		<xinput size="1">
+			<input pin="cursor_avg"/>
+		</xinput>
+	</consumer>	
+	
+	<consumer create="ssi_consumer_FileWriter"  type="1" path="cursor.txt">
+		<input pin="cursor" frame="0.2s"/>
+	</consumer>
+	
+	<consumer create="ssi_consumer_SocketWriter" osc="True">
+		<input pin="cursor" frame="0.2s"/>
+	</consumer>
+	
+	<consumer create="ssi_consumer_ZeroEventSender" mindur="0.3" sname="cursor" ename="gesture">
+		<input pin="button" frame="0.2s"/>		
+	</consumer>
+	
+	<consumer create="ssi_consumer_Classifier" trainer="mouse">
+		<input pin="cursor" listen="gesture@cursor"/>
+	</consumer>
+	
+</pipeline>

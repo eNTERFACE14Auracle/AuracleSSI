@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!-- register dlls -->
+	<register>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="400,0,400,600"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,3,0,0,400,600"/>	
+	
+	<!-- mouse sensor -->
+	<sensor create="ssi_sensor_Mouse" sr="100.0">
+		<provider channel="cursor" pin="cursor"/>
+	</sensor>
+	
+	<!-- derivative 
+	
+	By taking the 1st derivative we calculate the speed
+	of the cursor movement.
+	
+	-->
+	<transformer create="ssi_filter_Derivative" names="1st">
+		<input pin="cursor" frame="0.1s"/>
+		<output pin="speed"/>
+	</transformer>
+	
+	<!-- energy 
+	
+	Now we calculate the energy of the movement for each dimension 
+	as well	as the overall energy.
+	
+	-->
+	<transformer create="ssi_feature_Energy">
+		<input pin="speed" frame="0.2s" delta="0.1s"/>
+		<output pin="energies"/>
+	</transformer>
+	<transformer create="ssi_feature_Energy" global="true">
+		<input pin="speed" frame="0.2s" delta="0.1s"/>
+		<output pin="energy"/>
+	</transformer>
+
+	<!-- visualization -->
+	<consumer create="ssi_consumer_SignalPainter" name="cursor" size="10.0">
+		<input pin="cursor" frame="0.2s" />		
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="energy per dimension" size="10.0">
+		<input pin="energy" frame="0.2s" />		
+	</consumer>	
+	<consumer create="ssi_consumer_SignalPainter" name="overall energy" size="10.0">
+		<input pin="energies" frame="0.2s" />		
+	</consumer>
+	
+</pipeline>

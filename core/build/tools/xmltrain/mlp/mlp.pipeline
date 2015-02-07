@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+
+	<!-- register dlls -->
+	<register>
+		<load name="ssimlpxmld.dll"/>
+		<load name="ssimoused.dll"/>
+		<load name="ssisignald.dll"/>
+		<load name="ssimodeld.dll"/>
+		<load name="ssiioputd.dll"/>
+		<load name="ssigraphicd.dll"/>
+	</register>
+	
+	<!-- sensor + provider + filter -->	
+	<sensor create="ssi_sensor_Mouse" mask="2">
+		<provider channel="button" pin="button"/>
+		<provider channel="cursor" pin="cursor"/>
+	</sensor>
+	
+	<consumer create="ssi_consumer_MlpXml">
+		<input pin="cursor" frame="0.2s" delta="0"/>
+		<xinput size="1">
+			<input pin="button"/>
+		</xinput>
+	</consumer>
+	
+</pipeline>

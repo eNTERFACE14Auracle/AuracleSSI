@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	<register>
+		<load name="ssiioput.dll"/>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	<sensor create="ssi_sensor_Mouse" option="mouse">
+		<provider channel="button" pin="mouse_button"/>
+		<provider channel="cursor" pin="mouse_cursor"/>
+	</sensor>
+	<transformer create="ssi_filter_Derivative" option="derivative">		
+		<input pin="mouse_cursor" frame="0.2s" delta="0"/>		
+		<output pin="mouse_cursor_d"/>		
+	</transformer>
+	<consumer create="ssi_consumer_SignalPainter">
+		<input pin="mouse_cursor" frame="0.2s"/>
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter">
+		<input pin="mouse_cursor_d" frame="0.2s"/>
+	</consumer>
+	<option create="ssi_consumer_FileWriter" option="mousewrite">
+		<set name="path" value="mouse.txt"/>
+		<set name="type" value="1"/>
+	</option>
+	<consumer create="ssi_consumer_FileWriter" option="mousewrite">
+		<input pin="mouse_cursor" frame="0.2s"/>
+	</consumer>
+</pipeline>

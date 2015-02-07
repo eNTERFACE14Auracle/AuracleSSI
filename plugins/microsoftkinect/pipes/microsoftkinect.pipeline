@@ -1,0 +1,70 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<register>
+		<load name="ssiioput.dll" />
+		<load name="ssigraphic.dll" />
+		<load name="ssimodel.dll" />
+		<load name="ssisignal.dll" />
+		<load name="ssimicrosoftkinect.dll"/>
+		<load name="ssicamera.dll"/>
+	</register>
+		
+	<!-- set framework options -->		
+	
+	<framework console="true" cpos="0,400,600,200"/>		
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="2,2,0,0,600,400"/>		
+	
+	<!-- kinect sensor 
+	
+	- turn on trackNearestPerson to always track the nearest person
+	- turn on seatedSkeletonMode if tracked person is seating
+	- turn off showFaceTracking and showBodyTracking to NOT visulaize tracking results in the rgb image
+	
+	-->
+	<sensor create="ssi_sensor_MicrosoftKinect" trackNearestPerson="true" seatedSkeletonMode="false" simpleFaceTracking="false" showFaceTracking="false" showBodyTracking="false" nearTrackingMode="true">
+		<provider channel="rgb" pin="rgb"/>
+		<provider channel="depthr" pin="depth"/>
+		<provider channel="au" pin="au"/>
+		<provider channel="head" pin="head"/>
+		<provider channel="skeleton" pin="skel"/>
+		<provider channel="face" pin="face"/>
+	</sensor>
+	
+	<!-- prepare visualization -->
+	
+	<transformer create="ssi_filter_MicrosoftKinectPainter">	
+		<input pin="rgb" frame="1"/>
+		<xinput size="2">
+			<input pin="skel"/>
+			<input pin="face"/>
+		</xinput>
+		<output pin="rgb_skelface"/>
+	</transformer>	
+	<transformer create="ssi_filter_MicrosoftKinectPainter">	
+		<input pin="depth" frame="1"/>
+		<xinput size="2">
+			<input pin="skel"/>
+			<input pin="face"/>
+		</xinput>
+		<output pin="depth_skelface"/>
+	</transformer>
+	
+	<!-- visualization -->
+	
+	<consumer create="ssi_consumer_VideoPainter" flip="False" mirror="False" name="rgb">
+		<input pin="rgb_skelface" frame="1"/>
+	</consumer>	
+	<consumer create="ssi_consumer_VideoPainter" flip="False" mirror="False" name="depth">
+		<input pin="depth_skelface" frame="1"/>
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="head" size="10">
+		<input pin="head" frame="0.1s"/>					
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="au" size="10">
+		<input pin="au" frame="0.1s"/>					
+	</consumer>
+	
+</pipeline>

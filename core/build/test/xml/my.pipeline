@@ -1,0 +1,101 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!-- will be executed before the pipeline is started 			
+		type = pre, post, [now]
+		wait = milliseconds to wait, if < 0 until job is finished [-1] 
+	-->
+	<execute name="job.bat" args="pre 5" type="pre" wait="0"/>
+	
+	<!-- will be executed after the pipeline is stopped -->
+	<execute name="job.bat" args="post 3" type="post" wait="-1"/>
+
+	<!-- register dlls -->
+	<register>
+		<load name="ssiioput.dll"/>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+		<load name="ssimodel.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="400,300,400,300"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="2,2,0,0,400,600"/>		
+	
+	<!-- sensor + provider + filter -->
+	<!-- <option create="ssi_sensor_Mouse" option="mouse">
+		<set name="mask" value="2"/>
+	</option> -->
+	<sensor create="ssi_sensor_Mouse" option="mouse" mask="1">
+		<provider channel="button" pin="button"/>
+		<provider channel="cursor" pin="$(cursor_pin)" size="5.0" check="2.0" sync="2.5">
+			<transformer create="ssi_filter_Selector"/>
+		</provider>
+	</sensor>
+	
+	<!-- will be executed right after parsing -->
+	<execute name="job.bat" args="now 5" type="now" wait="2000"/>
+	
+	<!-- transformer -->
+	<transformer create="ssi_filter_Derivative" names="$(derivatives)">		
+		<input pin="$(cursor_pin)" frame="0.2s" delta="0"/>			
+		<!-- 
+		<xinput size=2>
+			<input pin="button"/>			
+			<input pin="cursor"/>
+		</xinput>
+		-->
+		<output pin="cursor_d" size="5.0"/>			
+	</transformer>
+	
+	<!-- consumer -->
+	<consumer create="ssi_consumer_SignalPainter" size="10.0" name="$(caption)">
+		<input pin="$(cursor_pin)" frame="0.2s"/>		
+	</consumer>
+		
+	<!-- triggered consumer -->	
+	<gate open="$(write:console)">
+		<consumer create="ssi_consumer_FileWriter" type="1">
+			<input pin="$(cursor_pin)" frame="0.2s" trigger="button"/>		
+		</consumer>
+	</gate>
+	<gate close="$(write:console)">
+		<consumer create="ssi_consumer_FileWriter" type="1" path="cursor" stream="false">
+			<input pin="$(cursor_pin)" frame="0.2s" trigger="button"/>		
+		</consumer>
+	</gate>
+	
+	<!-- event -->	
+	<consumer create="ssi_consumer_ZeroEventSender" mindur="0.2" sname="ezero" ename="pressed" eager="true">
+		<input pin="button" frame="0.25s"/>		
+	</consumer>		
+	
+	<!-- consumer + event + transformer + xinput -->
+	<consumer create="ssi_consumer_SignalPainter">
+		<input pin="$(cursor_pin)" listen="pressed@ezero">						
+			<transformer create="ssi_filter_Derivative" names="$(derivatives)"/>
+		</input>
+		<xinput size="2">
+			<input pin="$(cursor_pin)"/>
+			<input pin="$(cursor_pin)">
+				<transformer create="ssi_filter_Derivative" names="$(derivatives)"/>
+			</input>
+		</xinput> 
+	</consumer>
+	
+	<!-- include -->
+	<include name="my_include" skip="$(include:skip)"/>
+		
+	<!-- listener -->
+	<!--<listener create="ssi_listener_EventMonitor" mpos="400,0,400,300">
+		<input listen="@" span="20000" />
+	</listener>	-->
+	
+	<object create="ssi_listener_EventMonitor" mpos="400,0,400,300">
+		<listen address="$(monitor_address)" span="$(monitor_span)" state="ALL"/>
+	</object>
+	
+</pipeline>

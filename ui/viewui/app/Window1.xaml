@@ -1,0 +1,14 @@
+﻿<Window x:Class="ssi.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:view="clr-namespace:ssi;assembly=ssiview"
+    xmlns:select="clr-namespace:ssi;assembly=ssiselect"
+    xmlns:local="clr-namespace:ssi"  
+    Title="SSI/ViewUI v0.9.5 (http://openssi.net)" WindowState="Maximized" Height="Auto" Width="Auto" AllowDrop="True" AllowsTransparency="False">
+    
+    <Grid>
+        
+        <view:ViewControl x:Name="view"></view:ViewControl>
+       
+    </Grid>
+</Window>

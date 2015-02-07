@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<register>
+		<load name="ssiioput.dll" />
+		<load name="ssigraphic.dll" />
+		<load name="ssimodel.dll" />
+		<load name="ssisignal.dll" />
+		<load name="ssimicrosoftkinect.dll"/>
+		<load name="ssicamera.dll"/>
+	</register>
+		
+	<!-- set framework options -->		
+	
+	<framework console="true" cpos="0,400,400,400"/>		
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="2,1,0,0,800,400"/>		
+	
+	<!-- kinect sensor 
+	
+	- turn on trackNearestPerson to always track the nearest person
+	- turn on seatedSkeletonMode if tracked person is seating
+	- turn off showFaceTracking and showBodyTracking to NOT visulaize tracking results in the rgb image
+	
+	-->
+	<sensor create="ssi_sensor_MicrosoftKinect" trackNearestPerson="true" seatedSkeletonMode="false" simpleFaceTracking="false" showFaceTracking="false" showBodyTracking="false" nearTrackingMode="true">
+		<provider channel="rgb" pin="rgb"/>
+		<provider channel="au" pin="au"/>
+		<provider channel="skeleton" pin="skel"/>
+		<provider channel="face" pin="face"/>
+	</sensor>
+	
+	<!-- smile detection -->
+	<transformer create="ssi_filter_MicrosoftKinectSmileDetector">
+		<input pin="au" frame="5"/>
+		<output pin="au_smile"/>
+	</transformer>	
+	<consumer create="ssi_consumer_ThresEventSender" thres="0" hangin="3" hangout="3" mindur="1.0" ename="smile" sname="kinect" eager="true">
+		<input pin="au_smile" frame="5"/>
+	</consumer>
+	
+	<!-- prepare visualization -->
+	
+	<transformer create="ssi_filter_MicrosoftKinectPainter">	
+		<input pin="rgb" frame="1"/>
+		<xinput size="1">
+			<input pin="face"/>
+		</xinput>
+		<output pin="rgb_face"/>
+	</transformer>	
+	
+	<!-- visualization -->
+	
+	<consumer create="ssi_consumer_VideoPainter" flip="False" mirror="False" name="rgb">
+		<input pin="rgb_face" frame="1"/>
+	</consumer>	
+	<consumer create="ssi_consumer_SignalPainter" name="au" size="10">
+		<input pin="au_smile" frame="0.1s"/>					
+	</consumer>	
+	<listener create="ssi_listener_EventMonitor" mpos="400,400,400,400">
+		<input listen="@" span="5000"/>
+	</listener>	
+	
+</pipeline>

@@ -1,0 +1,54 @@
+------------------------------------------------------------
+    Development Enviroment
+------------------------------------------------------------
+
+    SSI has been developed under Visual Studio 2010 and
+	supports 32-bit and 64-bit Window systems.
+	
+------------------------------------------------------------
+    Installation
+------------------------------------------------------------
+
+    1. download and unzip ssi.zip to <ssiroot>
+    2. run setup.exe to set up enviroment variables for SSI
+	
+------------------------------------------------------------
+    Getting Started
+------------------------------------------------------------
+
+    Run pipelines in <ssiroot>\pipes\ 
+	   
+------------------------------------------------------------
+    Documentation
+------------------------------------------------------------	
+
+	<ssiroot>\core\build\ssi.sln contains a bunch of test projects to
+	   demonstrate the functions of the core library and core dlls
+
+	<ssiroot>\pipes\ contains example pipelines
+	
+	<ssiroot>\docs\api\ contains reference html files for available components
+	   
+    <ssiroot>\docs\tutorial\ contains a comprehensive tutorial (tutorial.pdf) and sample code (tutorial.sln)
+	  
+	<ssiroot>\docs\ui\ contains documentation for the graphical training interface
+	
+	<ssiroot>\docs\xml\ contains documentation on how to build xml pipelines
+
+------------------------------------------------------------
+    Troubleshooting
+------------------------------------------------------------	
+	
+	*  There seems to be an issue with Avira Antivir and VC++ debugging. If you ever encounter the error 
+	   message: "NtClose was called on a handle that was protected from close via NtSetInformationObject"
+	   please refer to the following articel:
+	
+	http://www.codeproject.com/Messages/3694402/VCplusplus-debugging-with-latest-Avira-Antivir.aspx
+	
+	*  Sometimes it seems that the x64 configuration causes problems on x86 machines. If you ever get the
+	   message that "MSVCR90D.dll was not found" when running a ssi application out of visual studio delete 
+	   the x64 configuration and try again.
+	
+------------------------------------------------------------
+    Bug report to support@openssi.net
+------------------------------------------------------------

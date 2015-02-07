@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!-- register dlls -->
+	<register>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="0,400,800,200"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="2,1,0,0,800,400"/>	
+	
+	<!-- mouse sensor -->
+	<sensor create="ssi_sensor_Mouse" sr="100.0">
+		<provider channel="cursor" pin="cursor"/>
+	</sensor>
+	
+	<!-- extend range -->
+	<transformer create="ssi_filter_Expression" single="false" expression="5 * d" join="0">
+		<input pin="cursor" frame="0.1s"/>
+		<output pin="exp"/>
+	</transformer>
+	
+	<!-- cast to short -->
+	<transformer create="ssi_filter_Cast" cast="3">
+		<input pin="exp" frame="0.1s"/>
+		<output pin="cast"/>
+	</transformer>
+
+	<!-- visualization -->
+	<consumer create="ssi_consumer_SignalPainter" name="cursor (float)" size="10.0">
+		<input pin="exp" frame="0.2s" />		
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="cursor (short)" size="10.0">
+		<input pin="cast" frame="0.2s" />		
+	</consumer>
+	
+</pipeline>

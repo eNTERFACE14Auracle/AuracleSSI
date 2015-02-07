@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!-- register dlls -->
+	<register>
+		<load name="ssiioput.dll"/>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="0,400,400,400"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,1,0,0,400,400"/>	
+	
+	<!-- mouse sensor -->
+	<sensor create="ssi_sensor_Mouse" sr="50.0" mask="1">		
+		<provider channel="cursor" pin="cursor"/>
+		<provider channel="button" pin="button" />
+	</sensor>
+	
+	<!-- trigger -->
+	<consumer create="ssi_consumer_ZeroEventSender" mindur="0.5" maxdur="2.0" sname="button" ename="pressed" eall="true" eager="true">
+		<input pin="button" frame="0.1s" />		
+	</consumer>		
+	
+	<!-- visualization -->
+	<consumer create="ssi_consumer_SignalPainter" name="cursor" size="10.0">
+		<input pin="cursor" frame="0.2s" />		
+	</consumer>
+	
+	<!-- socket sender 
+	
+	Streams a signal to a socket in different formats (binary, ascii, osc)
+	
+	-->
+	<consumer create="ssi_consumer_SocketWriter" port="7777" type="0" format="0">
+		<input pin="cursor" frame="0.2s" />
+	</consumer>
+	<consumer create="ssi_consumer_SocketWriter" port="8888" type="0" format="1" delim=";">
+		<input pin="cursor" frame="0.2s" />
+	</consumer>
+	<consumer create="ssi_consumer_SocketWriter" port="9999" type="0" format="2">
+		<input pin="cursor" frame="0.2s" />
+	</consumer>
+	
+	<!-- socket event sender 
+	
+	Sends detected events to a socket port
+	
+	-->
+	<object create="ssi_listener_SocketEventWriter" port="6666" type="0" xml="false">
+		<listen address="pressed@button"/>
+	</object>		
+	
+</pipeline>

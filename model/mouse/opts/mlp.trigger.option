@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<options>
+    <item name="hard" type="BOOL" num="1" value="false" help="consider all dimensions" />
+    <item name="hangin" type="UINT" num="1" value="0" help="# of non-zero values before onset is detected" />
+    <item name="hangout" type="UINT" num="1" value="0" help="# of non-zero values before offset is detected" />
+    <item name="mindur" type="DOUBLE" num="1" value="3.000000e-001" help="minimum duration in seconds" />
+    <item name="maxdur" type="DOUBLE" num="1" value="5.000000e+000" help="maximum duration in seconds" />
+    <item name="loffset" type="DOUBLE" num="1" value="0.000000e+000" help="lower offset in seconds (will be substracted from event start time)" />
+    <item name="uoffset" type="DOUBLE" num="1" value="0.000000e+000" help="upper offset in seconds (will be added to event end time)" />
+    <item name="skip" type="BOOL" num="1" value="false" help="skip if max duration is exceeded" />
+    <item name="sname" type="CHAR" num="1024" value="zsender" help="name of sender (if sent to event board)" />
+    <item name="ename" type="CHAR" num="1024" value="zevent" help="name of event (if sent to event board)" />
+    <item name="eall" type="BOOL" num="1" value="false" help="forward incomplete events to event board, otherwise only complete events are sent" />
+    <item name="eager" type="BOOL" num="1" value="false" help="start event is sent as soon as possible event is triggered" />
+</options>

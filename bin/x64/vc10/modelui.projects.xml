@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<!--SSI MLP Project Collection-->
+<projects>
+  <item>..\..\..\model\mouse</item>
+  <item>..\..\..\model\ev</item>
+  <item>..\..\..\model\kinect</item> 
+  <item>..\..\..\model\wiimote</item>
+  <item>..\..\..\model\cspr</item>
+</projects>

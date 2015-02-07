@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="ssi.NavigatorControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="Auto" Width="Auto" Visibility="Visible">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="MySlider.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Grid.Row="0">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Column="0" Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Left">
+            <Button Name="newAnnoButton" Width="70" Height="25" BorderBrush="LightGray" Background="White" Margin="5" VerticalAlignment="Center">New Anno</Button>
+            <Button Name="saveAnnoButton" Width="70" Height="25" BorderBrush="LightGray" Background="White" Margin="5" VerticalAlignment="Center">Save Anno</Button>
+            <Button Name="saveAnnoAsButton" Width="80" Height="25" BorderBrush="LightGray" Background="White" Margin="5" VerticalAlignment="Center">Save Anno As</Button>
+            <TextBox HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" BorderThickness="0" FontStyle="Italic">Right click adds || Alt + Left click renames || Del removes</TextBox>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Center">
+            <Button Name="jumpFrontButton" Width="70"  Height="25" BorderBrush="LightGray" Background="White" Margin="5" VerticalAlignment="Center" IsEnabled="True">|&lt;</Button>
+            <Button Name="playButton" Width="70"  Height="25" BorderBrush="LightGray" Background="White" Margin="5" VerticalAlignment="Center" IsEnabled="False">Play</Button>
+            <Button Name="jumpEndButton" Width="70"  Height="25" BorderBrush="LightGray" Background="White" Margin="5" VerticalAlignment="Center" IsEnabled="True">&gt;|</Button>            
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Orientation="Horizontal" FlowDirection="LeftToRight" HorizontalAlignment="Right">
+            <Button Name="loadButton" Width="70" Height="25" BorderBrush="LightGray" Background="White" Margin="5" VerticalAlignment="Center">Load</Button>
+            <Button Name="clearButton" Width="70" Height="25" BorderBrush="LightGray" Background="White" Margin="5" VerticalAlignment="Center">Clear</Button>
+        </StackPanel>
+    </Grid>
+
+</UserControl>

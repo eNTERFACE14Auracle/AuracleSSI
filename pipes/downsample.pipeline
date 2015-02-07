@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<register>
+		<load name="ssigraphic.dll" />
+		<load name="ssisignal.dll"/>
+		<load name="ssimouse.dll"/>
+		<load name="ssiioput.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="400,0,400,600"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,2,0,0,400,600"/>
+	
+	<!-- cursor sensor -->
+	<sensor create="ssi_sensor_Mouse" option="cursor" scale="true" sr="200">
+		<provider channel="cursor" pin="cursor"/>
+	</sensor>
+
+	<!-- lowpass 
+	
+	The input signal is downsampled from 200 Hz to 10 Hz.
+	To avoid artefacts the signal is first run through a 
+	lowpass filter with a cutoff of 5 Hz (=nyquist frequency).
+	
+	-->
+	<transformer create="ssi_filter_Butfilt" type="0" order="5" norm="false" low="5" zero="true">
+		<input pin="cursor" frame="0.1s"/>
+		<output pin="low"/>
+	</transformer>
+   	
+	<!-- downsample 
+	
+	Now we keep only every 20th sample.
+	
+	-->
+	<transformer create="ssi_transformer_DownSample" factor="20">
+		<input pin="low" frame="0.1s"/>
+		<output pin="down"/>
+	</transformer>
+		
+	<!-- visualization -->	
+	<consumer create="ssi_consumer_SignalPainter" name="cursor" size="10">
+		<input pin="cursor" frame="0.2s" delta="0"/>
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="downsampled" size="10">
+		<input pin="down" frame="0.2s" />
+	</consumer>	
+
+	
+</pipeline>

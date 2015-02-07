@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+
+	<!-- classifier -->
+	<consumer create="ssi_consumer_Classifier" trainer="$(trainer)" sname="classifier" ename="gesture">
+		<input pin="$(cursor_pin)" listen="pressed@ezero"/>
+	</consumer>
+
+</pipeline>

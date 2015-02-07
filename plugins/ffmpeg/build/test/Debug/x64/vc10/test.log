@@ -1,0 +1,28 @@
+﻿Build started 26/06/2014 11:17:47.
+     1>Project "C:\Users\Auracle\Documents\openssi-bleedingedge\plugins\ffmpeg\build\test\test.vcxproj" on node 3 (build target(s)).
+     1>c:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.Targets(1200,9): warning : The referenced project '..\dlls\fusion.vcxproj' does not exist.
+     1>InitializeBuildStatus:
+         Creating "Debug\x64\vc10\test.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /I..\..\include /I..\..\..\..\core\include /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _CRT_SECURE_NO_DEPRECATE /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\x64\vc10\\" /Fd"Debug\x64\vc10\vc100.pdb" /Gd /TP /errorReport:prompt TestMain.cpp
+         TestMain.cpp
+       ManifestResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\x64\vc10\test.exe.embed.manifest.res" Debug\x64\vc10\test_manifest.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Auracle\Documents\openssi-bleedingedge\plugins\ffmpeg\build\Debug\test.exe" /INCREMENTAL /NOLOGO /LIBPATH:..\..\..\..\libs\x64\vc10 ssid.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\x64\vc10\test.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Auracle\Documents\openssi-bleedingedge\plugins\ffmpeg\build\Debug\test.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE:NO /IMPLIB:"C:\Users\Auracle\Documents\openssi-bleedingedge\plugins\ffmpeg\build\Debug\test.lib" /MACHINE:X64 Debug\x64\vc10\test.exe.embed.manifest.res
+         Debug\x64\vc10\TestMain.obj
+         test.vcxproj -> C:\Users\Auracle\Documents\openssi-bleedingedge\plugins\ffmpeg\build\Debug\test.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\x64\vc10\test.exe.embed.manifest" /manifest Debug\x64\vc10\test.exe.intermediate.manifest
+         All outputs are up-to-date.
+       LinkEmbedManifest:
+         All outputs are up-to-date.
+         test.vcxproj -> C:\Users\Auracle\Documents\openssi-bleedingedge\plugins\ffmpeg\build\Debug\test.exe
+       FinalizeBuildStatus:
+         Deleting file "Debug\x64\vc10\test.unsuccessfulbuild".
+         Touching "Debug\x64\vc10\test.lastbuildstate".
+     1>Done Building Project "C:\Users\Auracle\Documents\openssi-bleedingedge\plugins\ffmpeg\build\test\test.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.61

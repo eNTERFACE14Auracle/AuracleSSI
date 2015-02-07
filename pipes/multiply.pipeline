@@ -1,0 +1,60 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!-- register dlls -->
+	<register>
+		<load name="ssiioput.dll"/>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="400,0,1000,570" countdown="0"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,2,0,0,400,400"/>	
+	
+	<!-- mouse sensor 
+	
+	By adding a selector filter we keep y-axis only 
+	
+	-->
+	<sensor create="ssi_sensor_Mouse">
+		<provider channel="cursor" pin="cursor">
+			<transformer create="ssi_filter_Selector" indices="0,1"/>
+		</provider>
+	</sensor>
+	
+	<!-- slider
+	
+	Slider to control multiplication value.
+	
+	-->
+	<object create="ssi_object_EventSlider" sname="slider" ename="factor" vname="factor" defval="1.0" minval="0.0" maxval="2.0" pos="5,405,390,75"/>
+	
+	<!-- multiplier
+	
+	We add a multiplier.
+	
+	-->
+	<transformer create="ssi_filter_Multiply" factor="1.0" join="3">
+		<input pin="cursor" frame="5"/>
+		<output pin="cursor_multiply"/>
+		<listen address="factor@slider"/>
+	</transformer>
+	
+	<!-- visualization 
+	
+	upper graph visualizes original cursor values
+	lower graph the limited signal
+	
+	-->
+	<consumer create="ssi_consumer_SignalPainter" name="raw" size="10.0">
+		<input pin="cursor" frame="5" />
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="multiply" size="10.0">
+		<input pin="cursor_multiply" frame="5" />
+	</consumer>
+	
+</pipeline>

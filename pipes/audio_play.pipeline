@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!--
+	
+	NOTE: run audio.pipeline first to generate a wav file
+	
+	-->	
+	
+	<register>
+		<load name="ssigraphic.dll" />		
+		<load name="ssiioput.dll"/>
+		<load name="ssiaudio.dll"/>
+	</register>
+	
+	<!-- audio sensor -->
+	<sensor create="ssi_sensor_WavReader" path="audio.wav" blockInSamples="512">
+		<provider channel="audio" pin="audio"/>
+	</sensor>
+	
+	<!-- visualization -->	
+	<consumer create="ssi_consumer_AudioPlayer">
+		<input pin="audio" frame="0.1s"/>
+	</consumer>
+	
+	
+</pipeline>

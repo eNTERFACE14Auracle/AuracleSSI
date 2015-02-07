@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<register>
+		<load name="ssiimage.dll"/>
+		<load name="ssicamera.dll"/>
+		<load name="ssigraphic.dll"/>		
+		<load name="ssimouse.dll"/>
+	</register>
+	
+	<!-- set framework options -->	
+	<framework console="true" cpos="400,0,400,600"/>
+	
+	<!-- set painter options -->		
+	<painter arrange="true" apos="2,3,0,0,400,600"/>
+	
+	<!-- camera sensor -->
+	<sensor create="ssi_sensor_Camera" option="camera">
+		<provider channel="video" pin="video"/>
+	</sensor>
+	
+	<!-- mouse sensor -->	
+	<sensor create="ssi_sensor_Mouse">
+		<provider channel="cursor" pin="cursor"/>
+	</sensor>	
+	
+	<!-- flip -->
+	<transformer create="ssi_filter_CVFlip" flip="true" mirror="true">
+		<input pin="video" frame="1" delta="0"/>
+		<output pin="flip"/>
+	</transformer>	
+	
+	<!-- gray -->
+	<transformer create="ssi_filter_CVColor">
+		<input pin="video" frame="1" delta="0"/>
+		<output pin="gray"/>
+	</transformer>
+	
+	<!-- resize -->
+	<transformer create="ssi_filter_CVResize" width="40" height="30">
+		<input pin="video" frame="1" delta="0"/>
+		<output pin="resize"/>
+	</transformer>
+	
+	<!-- camera flow -->
+	<transformer create="ssi_filter_CVChange">
+		<input pin="video" frame="1" delta="0"/>
+		<output pin="flow"/>
+	</transformer>
+	
+	<!-- camera crop -->
+	<transformer create="ssi_filter_CVCrop">
+		<input pin="video" frame="1" delta="0"/>
+		<xinput size="1">
+			<input pin="cursor"/>
+		</xinput>		
+		<output pin="crop"/>
+	</transformer>	
+	
+	<!-- store image -->
+	<consumer create="ssi_consumer_CVSave" path="image" format="0" number="false">
+		<input pin="video" frame="1"/>
+	</consumer>
+	
+	<!-- plot -->	
+	<consumer create="ssi_consumer_VideoPainter" name="original">
+		<input pin="video" frame="1" delta="0"/>
+	</consumer>
+		<consumer create="ssi_consumer_VideoPainter" name="flip">
+		<input pin="flip" frame="1" delta="0"/>
+	</consumer>
+	<consumer create="ssi_consumer_VideoPainter" name="gray">
+		<input pin="gray" frame="1" delta="0"/>
+	</consumer>
+	<consumer create="ssi_consumer_VideoPainter" name="resize" scale="False">
+		<input pin="resize" frame="1" delta="0"/>
+	</consumer>
+	<consumer create="ssi_consumer_VideoPainter" name="flow">
+		<input pin="flow" frame="1" delta="0"/>
+	</consumer>
+	<consumer create="ssi_consumer_VideoPainter" name="crop">
+		<input pin="crop" frame="1" delta="0"/>
+	</consumer>
+	
+</pipeline>

@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!-- register dlls -->
+	<register>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="400,0,400,600"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,2,0,0,400,600"/>	
+	
+	<!-- mouse sensor -->
+	<sensor create="ssi_sensor_Mouse" sr="100.0">
+		<provider channel="cursor" pin="cursor"/>
+	</sensor>
+	
+	<!-- moving minimum/maximum 
+	
+	Calculates minimum and maximum over a window of variable size.
+	Two methods	are available: a moving or sliding window.
+	Set format to 1 or 2 in order to calculate minimum or maximum only.
+	
+	-->
+	<transformer create="ssi_filter_MvgMinMax" method="1" win="5.0" format="3">
+		<input pin="cursor" frame="0.1s"/>
+		<output pin="mvgminmax"/>
+	</transformer>
+
+	<!-- visualization -->
+	<consumer create="ssi_consumer_SignalPainter" name="cursor" size="10.0">
+		<input pin="cursor" frame="0.2s" />		
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="moving minimum and maximum" size="10.0">
+		<input pin="mvgminmax" frame="0.2s" />		
+	</consumer>	
+	
+</pipeline>

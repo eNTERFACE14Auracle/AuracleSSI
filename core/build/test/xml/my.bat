@@ -1,0 +1,1 @@
+xmlpipe -config global;global2;global3 -save my

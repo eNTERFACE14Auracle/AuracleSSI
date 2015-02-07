@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!-- register dlls -->
+	<register>
+		<load name="ssiioput.dll"/>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+		<load name="ssimodel.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="400,300,400,300"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,1,0,0,400,600"/>	
+	
+	<!-- sensor -->
+	<sensor create="ssi_sensor_Mouse" mask="1">
+		<provider channel="button" pin="button" />
+		<provider channel="cursor" pin="cursor"/>
+	</sensor>
+	
+	<!-- consumer -->
+	<consumer create="ssi_consumer_SignalPainter" size="10.0">
+		<input pin="cursor" frame="1" />		
+	</consumer>
+	
+	<!-- event -->
+	<consumer create="ssi_consumer_ThresEventSender" mindur="0.2" sname="mouse" ename="pressed">
+		<input pin="button" frame="0.25s" />		
+	</consumer>		
+	
+	<!-- classifier 
+	
+	Loads model from a file named 'numbers.trainer', which contains templates for numbers 0-9.
+	You can now write numbers by pressing the left mouse button. As soon as you release the
+	button the performed gesture will be mapped to the best matching number.
+	
+	-->
+	<consumer create="ssi_consumer_Classifier" trainer="numbers" sname="mouse" ename="gesture">
+		<input pin="cursor" listen="pressed@mouse"/>
+	</consumer>
+	
+	<!-- listener -->
+	<listener create="ssi_listener_EventMonitor" mpos="400,0,400,300">
+		<input listen="@" span="20000" />
+	</listener>
+	
+</pipeline>

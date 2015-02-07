@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="ssi.SignalTrackEx"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ssi"
+             mc:Ignorable="d" 
+             Height="Auto" Width="Auto">
+    <Grid Name="grid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>            
+        </Grid.ColumnDefinitions>
+            
+        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+            <Button Name="ResetButton" Click="ResetButton_Click" Width="20" Background="{x:Null}" BorderBrush="{x:Null}">o</Button>
+            <Button Name="ZoomInButton" Click="ZoomInButton_Click" Width="20" Background="{x:Null}" BorderBrush="{x:Null}">+</Button>
+            <Button Name="ZoomOutButton" Click="ZoomOutButton_Click" Width="20" Background="{x:Null}" BorderBrush="{x:Null}">-</Button>
+            <Button Name="MoveUpButton" Click="MoveUpButton_Click" Width="20" Background="{x:Null}" BorderBrush="{x:Null}">^</Button>
+            <Button Name="MoveDownButton" Click="MoveDownButton_Click" Width="20" Background="{x:Null}" BorderBrush="{x:Null}">v</Button>
+            <Button Name="ColorButton" Click="ColorButton_Click" Width="20" Background="{x:Null}" BorderBrush="{x:Null}">c</Button>
+            <ComboBox Name="DimComboBox" Width="Auto" Background="{x:Null}" BorderBrush="{x:Null}" SelectionChanged="DimComboBox_SelectionChanged" HorizontalContentAlignment="Right"></ComboBox>            
+        </StackPanel>
+                
+        
+    </Grid>
+</UserControl>

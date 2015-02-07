@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<samples ssi-v="2">
+    <info ftype="BINARY" size="79" missing="0" garbage="0">
+        <streams>
+            <item sr="0.625000" dim="1451" byte="4" type="FLOAT" />
+        </streams>
+        <classes>
+            <item name="negative" size="39" />
+            <item name="positive" size="40" />
+        </classes>
+        <users>
+            <item name="user" size="79" />
+        </users>
+    </info>
+</samples>

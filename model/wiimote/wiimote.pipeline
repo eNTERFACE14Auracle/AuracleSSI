@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+
+	<register>
+		<load name="ssimlpxml.dll"/>
+		<load name="ssiwiimote.dll"/>
+		<load name="ssisignal.dll"/>
+		<load name="ssimodel.dll"/>
+		<load name="ssiioput.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssiprotractor.dll"/>
+	</register>
+	
+	<sensor create="ssi_sensor_WiiRemote">
+		<provider channel="acceleration" pin="acceleration"/>
+		<provider channel="button" pin="button"/>
+	</sensor>
+	
+	<consumer create="ssi_consumer_SignalPainter" size="10" arrange="1,1,1,0,0,200,200">
+		<input pin="acceleration" frame="0.2s"/>
+	</consumer>
+	
+	<consumer create="ssi_consumer_MlpXml">
+		<input pin="acceleration" frame="0.2s" delta="0"/>
+		<xinput size="1">
+			<input pin="button"/>
+		</xinput>
+	</consumer>
+	
+</pipeline>

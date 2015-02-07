@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<pipeline>
+
+	<register>
+		<load name="ssigraphic.dll" />
+		<load name="ssiioput.dll" />
+		<load name="ssiffmpeg.dll" />
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="640,240,320,240"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="2,1,0,240,640,240"/>
+	
+	<!-- video -->
+	<!--sensor create="ssi_sensor_FFMPEGReader" url="my-video.sdp" fps="25.0" width="640" height="480" stream="true">		
+		<provider channel="video" pin="video" size="2.0"/>
+	</sensor-->
+	<sensor create="ssi_sensor_FFMPEGReader" url="udp://127.0.0.1:1111" fps="25.0" width="320" height="240" stream="true">		
+		<provider channel="video" pin="video" size="2.0"/>
+	</sensor>
+	
+	<!-- audio -->
+	<!--sensor create="ssi_sensor_FFMPEGReader" url="my-audio.sdp" asr="48000.0" stream="true">		
+		<provider channel="audio" pin="audio" size="2.0"/>
+	</sensor-->	
+	<sensor create="ssi_sensor_FFMPEGReader" url="udp://127.0.0.1:2222" asr="48000.0" stream="true">		
+		<provider channel="audio" pin="audio" size="2.0"/>
+	</sensor>
+	
+	<!-- visualization -->	
+	<consumer create="ssi_consumer_VideoPainter" name="client - video">
+		<input pin="video" frame="1" delta="0"/>
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="client - audio" size="10" type="2">
+		<input pin="audio" frame="0.04s"/>
+	</consumer>
+	
+	<!-- store -->
+	<consumer create="ssi_consumer_FFMPEGWriter" url="stream.mp4">
+		<input pin="video" frame="1" />
+		<xinput size="1">
+			<input pin="audio"/>
+		</xinput>
+	</consumer>	
+	
+	
+</pipeline>

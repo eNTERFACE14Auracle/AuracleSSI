@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	<register>
+		<load name="ssiioput.dll"/>
+		<load name="ssiaudio.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	<option create="ssi_sensor_Audio" option="audio">
+		<set name="scale" value="true"/>
+	</option>
+	<sensor create="ssi_sensor_Audio" option="audio">
+		<provider channel="audio" pin="audio_raw"/>		
+	</sensor>
+	<transformer create="ssi_feature_Energy" option="energy">		
+		<input pin="audio_raw" frame="0.02s" delta="0.01s"/>		
+		<output pin="audio_energy"/>		
+	</transformer>
+	<consumer create="ssi_consumer_SignalPainter">
+		<input pin="audio_raw" frame="0.2s"/>
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" option="painter">
+		<input pin="audio_energy" frame="0.2s"/>
+	</consumer>
+	<option create="ssi_consumer_WavWriter" option="audiowrite">
+		<set name="path" value="audio.wav"/>
+	</option>
+	<consumer create="ssi_consumer_WavWriter" option="audiowrite">
+		<input pin="audio_raw" frame="0.2s"/>
+	</consumer>
+</pipeline>

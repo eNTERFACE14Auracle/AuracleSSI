@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+	
+	<!-- register dlls -->
+	<register>
+		<load name="ssiioput.dll"/>
+		<load name="ssimouse.dll"/>
+		<load name="ssigraphic.dll"/>
+		<load name="ssisignal.dll"/>
+	</register>
+	
+	<!-- set framework options -->
+	<framework console="true" cpos="400,400,400,400"/>
+	
+	<!-- set painter options -->
+	<painter arrange="true" apos="1,3,400,0,400,400"/>
+	
+	<!-- socket receiver 
+	
+	Reads from a socket port and feeds the received signal into the
+	pipeline. Use this component to receive signals from external applications.
+	Make sure to adjust the options to fit the incoming signal.
+	
+	-->
+	<sensor create="ssi_sensor_SocketReader" type="0" port="7777" format="0" ssr="50.0" sdim="2" sbyte="4" stype="9">		
+		<provider channel="socket" pin="cursor1"/>
+	</sensor>
+	<sensor create="ssi_sensor_SocketReader" type="0" port="8888" format="1" delim=";" ssr="50.0" sdim="2" sbyte="4" stype="9">		
+		<provider channel="socket" pin="cursor2"/>
+	</sensor>
+	<sensor create="ssi_sensor_SocketReader" type="0" port="9999" format="2" ssr="50.0" sdim="2" sbyte="4" stype="9">		
+		<provider channel="socket" pin="cursor3"/>
+	</sensor>	
+	
+	<!-- socket event receiver 
+	
+	Reads events from a socket port and puts them on the event board.
+	Use this component to receive events from external applications.
+	Make sure to adjust the options to fit the incoming event stream.
+	
+	-->
+	<object create="ssi_object_SocketEventReader" port="6666" ename="event" sname="button"/>	
+	<object create="ssi_listener_FileEventWriter" path="button">
+		<listen address="event@button"/>
+	</object>
+	
+	<!-- visualization -->
+	<consumer create="ssi_consumer_SignalPainter" name="cursor" size="10.0">
+		<input pin="cursor1" frame="0.2s" />		
+	</consumer>	
+	<consumer create="ssi_consumer_SignalPainter" name="cursor" size="10.0">
+		<input pin="cursor2" frame="0.2s" />		
+	</consumer>	
+	<consumer create="ssi_consumer_SignalPainter" name="cursor" size="10.0">
+		<input pin="cursor3" frame="0.2s" />		
+	</consumer>	
+	<object create="ssi_listener_EventMonitor" mpos="800,0,400,400">
+		<listen address="@" span="20000" />
+	</object>
+	
+</pipeline>
