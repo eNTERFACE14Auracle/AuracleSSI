@@ -26,12 +26,14 @@
 
 #include "ssi.h"
 #include "ssiffmpeg.h"
+#include "..\..\microsoftkinect\include\ssimicrosoftkinect.h"
 using namespace ssi;
 
 //#include <vld.h>
 
 void ex_output_file ();
 void ex_input_file ();
+void ex_test_kinect();
 void ex_output_stream ();
 void ex_input_stream ();
 
@@ -62,10 +64,11 @@ int main () {
 	Factory::RegisterDLL ("ssiaudio.dll");
 	Factory::RegisterDLL ("ssiimage.dll");
 
-	ex_output_file ();
-	ex_input_file ();
+	//ex_output_file ();
+	//ex_input_file ();
+	//ex_test_kinect();
 	ex_output_stream ();
-	ex_input_stream ();
+	//ex_input_stream ();
 	
 
 	ssi_print ("\n\n\tpress a key to quit\n");
@@ -110,7 +113,7 @@ void ex_output_file () {
 	frame->AddConsumer (2, ts, avwrite, "1", 0, tts);
 	
 	FFMPEGWriter *vwrite = ssi_create  (FFMPEGWriter, "vwrite", true);
-	vwrite->getOptions ()->setUrl ("out.mpeg");
+	vwrite->getOptions ()->setUrl ("out.h264");
 	flip = ssi_create (CVFlip, 0, true);
 	flip->getOptions ()->flip = true;
 	frame->AddConsumer (video, vwrite, "1", 0, flip);
@@ -164,7 +167,7 @@ void ex_input_file () {
 	
 	FFMPEGReader *vread = ssi_create (FFMPEGReader, "vread", true);
 	//vread->setLogLevel (SSI_LOG_LEVEL_DEBUG);
-	vread->getOptions ()->setUrl ("out.mpeg");
+	vread->getOptions ()->setUrl ("out.h264");
 	vread->getOptions ()->stream = false;
 	vread->getOptions ()->buffer = 1.0;
 	vread->getOptions ()->width = 640;
@@ -225,6 +228,106 @@ void ex_input_file () {
 	frame->Stop();
 	painter->Clear();
 	frame->Clear();
+}
+
+void ex_test_kinect() {
+
+	Factory::RegisterDLL ("ssimicrosoftkinect.dll");
+	ITheFramework *frame = Factory::GetFramework ();
+	IThePainter *painter = Factory::GetPainter ();
+
+	MicrosoftKinect *kinect = ssi_factory_create(ssi::MicrosoftKinect, "MicrosoftKinect", true);
+	kinect->getOptions()->trackNearestPerson = true;
+	kinect->getOptions()->simpleFaceTracking = false;
+	kinect->getOptions()->screenScale = false;
+	kinect->getOptions()->seatedSkeletonMode = false;
+	kinect->getOptions()->showBodyTracking = false;
+	kinect->getOptions()->showFaceTracking = false;
+	kinect->getOptions()->sr = 30;
+	ITransformable *rgb_t = frame->AddProvider (kinect, SSI_MICROSOFTKINECT_RGBIMAGE_PROVIDER_NAME, 0, 2.0, 0.5);
+	frame->AddSensor (kinect);
+
+	FFMPEGWriter *avwrite = ssi_create  (FFMPEGWriter, 0, true);
+	avwrite->getOptions ()->setUrl ("kinect.mp4");
+	avwrite->getOptions ()->stream = false;
+	frame->AddConsumer (rgb_t, avwrite, "1");
+
+	VideoPainter *cam_plot = ssi_pcast (VideoPainter, Factory::Create (VideoPainter::GetCreateName ()));
+	cam_plot->getOptions ()->setName ("video");
+	cam_plot->getOptions ()->flip = false;
+	frame->AddConsumer (rgb_t, cam_plot, "1");
+
+	// run framework
+	frame->Start ();
+	painter->Arrange (1,1,0,0,640,480);
+	painter->MoveConsole (0,480,640,480);
+	ssi_print ("\n\n\tpress enter to continue..\n\n");
+	getchar ();
+	frame->Stop ();
+	frame->Clear ();
+	painter->Clear ();
+}
+
+void ex_output_stream () {
+
+	ITheFramework *frame = Factory::GetFramework ();
+	IThePainter *painter = Factory::GetPainter ();
+
+	// audio	
+	Audio *microphone = ssi_create (Audio, "audio", true);
+	microphone->getOptions ()->scale = true;
+	microphone->getOptions ()->sr = 16000;
+	ITransformable *audio = frame->AddProvider (microphone, SSI_AUDIO_PROVIDER_NAME);	
+	frame->AddSensor (microphone);
+
+	// camera	
+	Camera *camera = ssi_create (Camera, "camera", true);
+	camera->getOptions ()->params.widthInPixels = 320;
+	camera->getOptions ()->params.heightInPixels = 240;
+	camera->getOptions ()->params.framesPerSecond = 25.0;
+	ITransformable *video = frame->AddProvider (camera, SSI_CAMERA_PROVIDER_NAME, 0, 2.0);
+	frame->AddSensor (camera);	
+
+	// video writer		
+	FFMPEGWriter *vwrite = ssi_create  (FFMPEGWriter, "vstreamout", true);	
+	vwrite->setLogLevel (SSI_LOG_LEVEL_DEBUG);
+	vwrite->getOptions ()->setUrl ("rtp://127.0.0.1:1111");
+	vwrite->getOptions ()->setFormat ("rtp");
+	vwrite->getOptions ()->video_bit_rate_kb = 256;
+	vwrite->getOptions ()->setSdp ("my-video.sdp");
+	vwrite->getOptions ()->stream = true;
+	frame->AddConsumer (video, vwrite, "1");
+
+	// audio writer		
+	FFMPEGWriter *awrite = ssi_create  (FFMPEGWriter, "astreamout", true);	
+	//awrite->setLogLevel (SSI_LOG_LEVEL_DEBUG);
+	awrite->getOptions ()->setUrl ("rtp://127.0.0.1:2222");
+	awrite->getOptions ()->setFormat ("rtp");
+	awrite->getOptions ()->audio_bit_rate_kb = 64;
+	awrite->getOptions ()->setSdp ("my-audio.sdp");
+	awrite->getOptions ()->stream = true;
+	frame->AddConsumer (audio, awrite, "0.04s");
+
+	// plot
+	SignalPainter *audio_plot = ssi_pcast (SignalPainter, Factory::Create (SignalPainter::GetCreateName ()));
+	audio_plot->getOptions ()->setName ("audio");
+	audio_plot->getOptions ()->size = 2.0;		
+	audio_plot->getOptions ()->type = PaintSignalType::AUDIO;
+	frame->AddConsumer (audio, audio_plot, "0.01s");
+	
+	VideoPainter *cam_plot = ssi_pcast (VideoPainter, Factory::Create (VideoPainter::GetCreateName ()));
+	cam_plot->getOptions ()->setName ("video");
+	frame->AddConsumer (video, cam_plot, "1");
+
+	// run framework
+	frame->Start ();
+	painter->Arrange (1,2,0,0,400,600);
+	painter->MoveConsole (400,0,400,600);
+	ssi_print ("\n\n\tpress enter to continue..\n\n");
+	getchar ();
+	frame->Stop ();
+	frame->Clear ();
+	painter->Clear ();
 }
 
 void ex_input_stream () {

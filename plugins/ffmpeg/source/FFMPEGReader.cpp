@@ -26,6 +26,7 @@
 
 #include "FFMPEGReader.h"
 #include "FFMPEGReaderClient.h"
+#include "base/Factory.h"
 
 namespace ssi {
 
@@ -36,11 +37,13 @@ FFMPEGReader::FFMPEGReader (const ssi_char_t *file)
 	_video_buffer (0),
 	_audio_buffer (0),
 	_video_provider (0),
+    _videoframestamp_provider (0),
 	_audio_provider(0),
 	_audio_sr (0),
 	_mode (MODE::UNDEFINED),
 	_client(0),
-	_timer (0)
+    _timer (0),
+    _elistener(0)
 {
 
 	ssi_log_level = SSI_LOG_LEVEL_DEFAULT;
@@ -52,7 +55,9 @@ FFMPEGReader::FFMPEGReader (const ssi_char_t *file)
 		_file = ssi_strcpy (file);
 	}
 	
-	_client = new FFMPEGReaderClient (this);				
+    _client = new FFMPEGReaderClient (this);
+
+    ssi_event_init (_event, SSI_ETYPE_NTUPLE);
 };
 
 FFMPEGReader::~FFMPEGReader () {
@@ -64,6 +69,8 @@ FFMPEGReader::~FFMPEGReader () {
 		OptionList::SaveXML (_file, _options);
 		delete[] _file;
 	}
+
+    ssi_event_destroy (_event);
 };
 
 bool FFMPEGReader::setProvider (const ssi_char_t *name, IProvider *provider) {
@@ -71,6 +78,10 @@ bool FFMPEGReader::setProvider (const ssi_char_t *name, IProvider *provider) {
 		setVideoProvider(provider);		
 		return true;
 	}
+    if(strcmp (name,SSI_FFMPEGREADER_VIDEOFRAMESTAMP_PROVIDER_NAME)==0)	{
+        setVideoFrameStampProvider(provider);
+        return true;
+    }
 	if(strcmp(name,SSI_FFMPEGREADER_AUDIO_PROVIDER_NAME)==0){
 		setAudioProvider(provider);		
 		return true;
@@ -101,6 +112,36 @@ void FFMPEGReader::setVideoProvider(IProvider *provider){
 	_video_provider->setMetaData (sizeof (ssi_video_params_t), &_video_format);
 	ssi_stream_init (_video_channel.stream, 0, 1, ssi_video_size (_video_format), SSI_IMAGE, _video_format.framesPerSecond);
 	_video_provider->init (&_video_channel);	
+};
+
+void FFMPEGReader::setVideoFrameStampProvider(IProvider *provider){
+
+    if(_videoframestamp_provider){
+        ssi_wrn ("provider already set");
+        return;
+    }
+
+    _videoframestamp_provider = provider;
+    /*_mode = _mode == MODE::UNDEFINED ? MODE::VIDEO : MODE::AUDIOVIDEO;
+
+    if (_options.stream) {
+        ssi_video_params (_video_format, _options.width, _options.height, _options.fps, 8, 3);
+    } else {
+        if (!_client->peekVideoFormat (_video_format)) {
+            ssi_wrn ("could not determine video format, use default options");
+            ssi_video_params (_video_format, _options.width, _options.height, _options.fps, 8, 3);
+        }
+    }
+
+    _video_provider->setMetaData (sizeof (ssi_video_params_t), &_video_format);
+    ssi_stream_init (_video_channel.stream, 0, 1, ssi_video_size (_video_format), SSI_IMAGE, _video_format.framesPerSecond);
+    _video_provider->init (&_video_channel);*/
+
+    if (_videoframestamp_provider) {
+        _videoframestamp_channel.stream.sr = _options.fps;
+        _videoframestamp_provider->init (&_videoframestamp_channel);
+        ssi_msg (SSI_LOG_LEVEL_DETAIL, "video frame stamp provider set");
+    }
 };
 
 void FFMPEGReader::setAudioProvider(IProvider *provider){
@@ -190,6 +231,79 @@ void FFMPEGReader::run () {
 		}			
 
 		SSI_DBG (SSI_LOG_LEVEL_DEBUG, "video buffer : %.2f%% ", _video_buffer->getFillState () * 100);
+
+        /// Determine the current frame stamp
+
+        int _codedframestamp = 0;
+        int _displayframestamp = 0;
+        if(_client){
+            _codedframestamp = _client->_codedFrameNumber;
+            _displayframestamp = _client->_displayFrameNumber;
+        }
+
+		ITheFramework *frame_work = Factory::GetFramework ();
+        ssi_time_t _time_stamp = frame_work->GetStartTimeMs() + frame_work->GetElapsedTimeMs();
+
+        //ssi_time_t _time_stamp = _video_channel.getStream().time;
+
+        /// Send frame stamps through events
+
+        // Get the timestamp of the current frame
+        //ssi_time_t _time_stamp = stream.time;
+
+        ssi_size_t _event_size = 3;
+        ssi_event_adjust(_event, _event_size * sizeof(ssi_event_tuple_t));
+
+		ssi_event_tuple_t * event_tuple = ssi_pcast (ssi_event_tuple_t, _event.ptr);
+
+        for (ssi_size_t i = 0; i < _event_size; i++) {
+            ssi_char_t str[SSI_MAX_CHAR];
+            ssi_sprint (str, "%u", i);
+            event_tuple[i].id = Factory::AddString(str);
+        }
+
+        ssi_size_t i = 0;
+
+        {
+            ssi_char_t str[SSI_MAX_CHAR];
+            ssi_sprint (str, "coded_frame");
+            event_tuple[i].id = Factory::AddString(str);
+        }
+        event_tuple[i++].value = (float)( _codedframestamp );
+
+        {
+            ssi_char_t str[SSI_MAX_CHAR];
+            ssi_sprint (str, "display_frame");
+            event_tuple[i].id = Factory::AddString(str);
+        }
+        event_tuple[i++].value = (float)( _displayframestamp );
+
+        {
+            ssi_char_t str[SSI_MAX_CHAR];
+            ssi_sprint (str, "stamp");
+            event_tuple[i].id = Factory::AddString(str);
+        }
+        event_tuple[i++].value = (float)( _time_stamp );
+
+        // Create an adequate event structure
+        // and add the right data to the event
+        //_event.time = ssi_cast (ssi_size_t, 1000 * _time_stamp + 0.5); //CF double-check the need of the extra time scaling
+        _event.dur = ssi_cast (ssi_size_t, 0);
+        _event.prob = ssi_cast (ssi_real_t, 1.0);
+        _event.state = SSI_ESTATE_CONTINUED;
+        _event.type = SSI_ETYPE_NTUPLE;
+
+        // And add the event to the event pool
+        _elistener->update (_event);
+
+        /// Send frame stamps through provider
+        if (_videoframestamp_provider){
+            std::vector<ssi_real_t> _videoframestamp_provided;
+            _videoframestamp_provided.push_back(_codedframestamp);
+            _videoframestamp_provided.push_back(_displayframestamp);
+            _videoframestamp_provided.push_back(_time_stamp);
+            bool result = _videoframestamp_provider->provide( ssi_pcast(ssi_byte_t, &_videoframestamp_provided[0]),1);
+        }
 	}
 
 	if (_audio_provider) {
@@ -230,14 +344,38 @@ bool FFMPEGReader::disconnect () {
 
 bool FFMPEGReader::pushVideoFrame (ssi_size_t n_bytes, ssi_byte_t *frame) {
 
-	SSI_ASSERT (n_bytes == ssi_video_size (_video_format));
+	/*SSI_ASSERT (n_bytes == ssi_video_size (_video_format));
 
-	return _video_buffer->push (frame);	
+	return _video_buffer->push (frame);	*/
+
+	if (n_bytes == ssi_video_size (_video_format)){
+		return _video_buffer->push (frame);	
+	}
+	else{
+		ssi_wrn("FFMPEGReader::pushVideoFrame: n bytes received and video size are different");
+		return false;
+	}
 }
 
 bool FFMPEGReader::pushAudioChunk (ssi_size_t n_samples, ssi_real_t *chunk) {
 
 	return _audio_buffer->push (n_samples, chunk);
+}
+
+bool FFMPEGReader::setEventListener (IEventListener *listener) {
+    _elistener = listener;
+    _event.sender_id = Factory::AddString (_options.sender_name);
+    if (_event.sender_id == SSI_FACTORY_STRINGS_INVALID_ID) {
+        return false;
+    }
+    _event.event_id = Factory::AddString (_options.events_name);
+    if (_event.event_id == SSI_FACTORY_STRINGS_INVALID_ID) {
+        return false;
+    }
+    _event_address.setSender (_options.sender_name);
+    _event_address.setEvents (_options.events_name);
+    _event.prob = 1.0;
+    return true;
 }
 
 }

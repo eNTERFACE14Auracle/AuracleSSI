@@ -37,7 +37,7 @@
 	</consumer>		
 	
 	<!-- write -->
-	<consumer create="ssi_consumer_FFMPEGWriter" url="copy.mpeg">
+	<consumer create="ssi_consumer_FFMPEGWriter" url="copy.h264">
 		<input pin="video" frame="1" />
 	</consumer>		
 

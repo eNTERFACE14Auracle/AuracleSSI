@@ -89,6 +89,7 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ssi$(ProjectName)d</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ssi$(ProjectName)</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ssi$(ProjectName)</TargetName>
+    <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(IncludePath)</IncludePath>
@@ -119,16 +120,6 @@
     <ProjectReference>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
-    <PreBuildEvent>
-      <Command>xcopy /Y ..\..\bin\$(PlatformName)\avcodec-55.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avdevice-55.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avfilter-4.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avformat-55.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avutil-52.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\postproc-52.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\swresample-0.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\swscale-2.dll ..\..\..\..\bin\$(PlatformName)\vc10\</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
@@ -153,16 +144,6 @@ xcopy /Y ..\..\bin\$(PlatformName)\swscale-2.dll ..\..\..\..\bin\$(PlatformName)
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
-    <PreBuildEvent>
-      <Command>xcopy /Y ..\..\bin\$(PlatformName)\avcodec-55.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avdevice-55.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avfilter-4.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avformat-55.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avutil-52.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\postproc-52.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\swresample-0.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\swscale-2.dll ..\..\..\..\bin\$(PlatformName)\vc10\</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -183,16 +164,6 @@ xcopy /Y ..\..\bin\$(PlatformName)\swscale-2.dll ..\..\..\..\bin\$(PlatformName)
     <PostBuildEvent>
       <Command>..\..\..\..\bin\$(PlatformName)\vc10\apigen -index -dir ..\..\..\..\docs\api $(TargetFileName)</Command>
     </PostBuildEvent>
-    <PreBuildEvent>
-      <Command>xcopy /Y ..\..\bin\$(PlatformName)\avcodec-55.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avdevice-55.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avfilter-4.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avformat-55.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avutil-52.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\postproc-52.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\swresample-0.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\swscale-2.dll ..\..\..\..\bin\$(PlatformName)\vc10\</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
@@ -216,16 +187,6 @@ xcopy /Y ..\..\bin\$(PlatformName)\swscale-2.dll ..\..\..\..\bin\$(PlatformName)
     <PostBuildEvent>
       <Command>..\..\..\..\bin\$(PlatformName)\vc10\apigen -index -dir ..\..\..\..\docs\api $(TargetFileName)</Command>
     </PostBuildEvent>
-    <PreBuildEvent>
-      <Command>xcopy /Y ..\..\bin\$(PlatformName)\avcodec-55.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avdevice-55.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avfilter-4.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avformat-55.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\avutil-52.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\postproc-52.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\swresample-0.dll ..\..\..\..\bin\$(PlatformName)\vc10\
-xcopy /Y ..\..\bin\$(PlatformName)\swscale-2.dll ..\..\..\..\bin\$(PlatformName)\vc10\</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

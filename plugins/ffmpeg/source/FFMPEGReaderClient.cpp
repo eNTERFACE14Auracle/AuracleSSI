@@ -55,7 +55,9 @@ FFMPEGReaderClient::FFMPEGReaderClient (FFMPEGReader *reader)
 	_audio_convert_size (0),
 	_video_convert_ctx (0),
 	_audio_convert_ctx (0),
-	_reader (reader) {
+	_reader (reader),
+    _codedFrameNumber(0),
+    _displayFrameNumber(0){
 
 	ssi_log_level = SSI_LOG_LEVEL_DEFAULT;
 
@@ -92,6 +94,9 @@ bool FFMPEGReaderClient::open () {
 	_audio_frame=0;
 	_video_frame_rgb=0;
 	int ret = 0;
+
+    _codedFrameNumber = 0;
+    _displayFrameNumber = 0;
 	
 	// fast streaming
 	if (_reader->getOptions ()->stream) {
@@ -298,6 +303,8 @@ void FFMPEGReaderClient::flush () {
 }
 
 bool FFMPEGReaderClient::close () {	
+    _codedFrameNumber = 0;
+    _displayFrameNumber = 0;
 
 	if(_fmt_ctx){
 		av_read_pause(_fmt_ctx);		
@@ -417,6 +424,8 @@ int FFMPEGReaderClient::decodePacket () {
 		ret = avcodec_decode_video2 (_video_codec_context, _video_frame, &gotVideoFrame, &_packet);
 		if (ret > 0 && gotVideoFrame) {
 			provideVideoFrame ();
+            _codedFrameNumber = _video_frame->coded_picture_number;
+            _displayFrameNumber = _video_frame->display_picture_number;
 		}
 	} 
 	

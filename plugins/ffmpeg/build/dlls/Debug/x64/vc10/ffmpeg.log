@@ -1,12 +1,16 @@
-﻿Build started 27/06/2014 20:08:54.
+﻿Build started 30/06/2014 19:36:36.
      1>Project "C:\Users\Auracle\Documents\openssi-bleedingedge\plugins\ffmpeg\build\dlls\ffmpeg.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\x64\vc10\ffmpeg.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /I..\..\include /I..\..\..\..\core\include /I..\..\build\libs\ffmpeg\include /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _CRT_SECURE_NO_DEPRECATE /D _WINDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\x64\vc10\\" /Fd"Debug\x64\vc10\vc100.pdb" /Gd /TP /errorReport:prompt ..\..\source\FFMPEGReader.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /I..\..\include /I..\..\..\..\core\include /I..\..\build\libs\ffmpeg\include /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _CRT_SECURE_NO_DEPRECATE /D _WINDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\x64\vc10\\" /Fd"Debug\x64\vc10\vc100.pdb" /Gd /TP /errorReport:prompt ..\..\source\ExportMain.cpp ..\..\source\FFMPEGReader.cpp ..\..\source\FFMPEGReaderClient.cpp
+         FFMPEGReaderClient.cpp
          FFMPEGReader.cpp
-     1>..\..\source\FFMPEGReader.cpp(291): warning C4244: 'argument' : conversion from 'ssi_time_t' to 'const ssi_real_t', possible loss of data
-     1>..\..\source\FFMPEGReader.cpp(292): warning C4244: 'argument' : conversion from 'int' to 'const ssi_real_t', possible loss of data
+     1>..\..\source\FFMPEGReader.cpp(302): warning C4244: 'argument' : conversion from 'int' to 'const ssi_real_t', possible loss of data
+     1>..\..\source\FFMPEGReader.cpp(303): warning C4244: 'argument' : conversion from 'int' to 'const ssi_real_t', possible loss of data
+     1>..\..\source\FFMPEGReader.cpp(304): warning C4244: 'argument' : conversion from 'ssi_time_t' to 'const ssi_real_t', possible loss of data
+         ExportMain.cpp
+         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Auracle\Documents\openssi-bleedingedge\plugins\ffmpeg\build\dlls\..\..\..\..\bin\x64\vc10\ssiffmpegd.dll" /NOLOGO /LIBPATH:..\..\..\..\libs\x64\vc10 /LIBPATH:..\libs\ffmpeg\lib\x64 ssid.lib avcodec.lib avdevice.lib avfilter.lib avformat.lib avutil.lib postproc.lib swresample.lib swscale.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\x64\vc10\ssiffmpegd.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Auracle\Documents\openssi-bleedingedge\bin\x64\vc10\ssiffmpegd.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\..\..\..\bin\x64\vc10\ssiffmpegd.lib" /MACHINE:X64 /DLL Debug\x64\vc10\FFMPEGAVBuffer.obj
          Debug\x64\vc10\FFMPEGReader.obj
@@ -26,4 +30,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.92
+Time Elapsed 00:00:04.22

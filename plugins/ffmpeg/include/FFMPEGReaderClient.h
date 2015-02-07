@@ -114,6 +114,8 @@ protected:
 	AVIOInterruptCB _interrupt_cb;
 
 	FFMPEGReader *_reader;
+public:
+    int _codedFrameNumber,_displayFrameNumber;
 };
 
 };

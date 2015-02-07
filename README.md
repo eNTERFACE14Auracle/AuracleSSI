@@ -16,7 +16,7 @@ See the README file for more information on SSI.
 This fork packs the following plugins:
 
  * `asio`: realtime audio playback
- * `ffmpeg`: video playback
+ * `ffmpeg`: video playback, modified to provide video frames
  * `microsoftkinect`: Microsoft Kinect sensor
  * `theyetribe`: Eye Tribe eye tracker sensor
 

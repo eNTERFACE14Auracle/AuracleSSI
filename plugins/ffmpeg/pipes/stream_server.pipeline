@@ -17,12 +17,12 @@
 	<painter arrange="true" apos="2,1,0,0,640,240"/>
 	
 	<!-- camera sensor -->
-	<sensor create="ssi_sensor_Camera" option="camera" width="320" height="240" fps="25.0" channel="3" depth="8">
-		<provider channel="video" pin="video" size="2.0"/>
-	</sensor>
-	<!--sensor create="ssi_sensor_CameraScreen" resize="true" resize_width="320" resize_height="240" fps="25.0" full="true">
+	<!--sensor create="ssi_sensor_Camera" option="camera" width="320" height="240" fps="25.0" channel="3" depth="8">
 		<provider channel="video" pin="video" size="2.0"/>
 	</sensor-->
+	<sensor create="ssi_sensor_CameraScreen" resize="true" resize_width="320" resize_height="240" fps="25.0" full="true">
+		<provider channel="video" pin="video" size="2.0"/>
+	</sensor>
 	
 	
 	<!-- audio sensor -->

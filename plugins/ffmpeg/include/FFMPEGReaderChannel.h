@@ -32,6 +32,7 @@
 #include "base/ISensor.h"
 
 #define SSI_FFMPEGREADER_VIDEO_PROVIDER_NAME "video"
+#define SSI_FFMPEGREADER_VIDEOFRAMESTAMP_PROVIDER_NAME "videoframestamp"
 #define SSI_FFMPEGREADER_AUDIO_PROVIDER_NAME "audio"
 
 namespace ssi {
@@ -57,6 +58,28 @@ namespace ssi {
 
 		ssi_stream_t stream;
 	};
+
+    class VideoFrameStampChannel : public IChannel {
+
+        friend class FFMPEGReader;
+
+    public:
+
+        VideoFrameStampChannel () {
+            ssi_stream_init (stream, 0, 3, sizeof (ssi_real_t), SSI_REAL, 0);
+        }
+        ~VideoFrameStampChannel () {
+            ssi_stream_destroy (stream);
+        }
+
+        const ssi_char_t *getName () { return SSI_FFMPEGREADER_VIDEOFRAMESTAMP_PROVIDER_NAME; };
+        const ssi_char_t *getInfo () { return "Properties are determined from the options."; };
+        ssi_stream_t getStream () { return stream; };
+
+    protected:
+
+        ssi_stream_t stream;
+    };
 
 	class AudioChannel : public IChannel {
 

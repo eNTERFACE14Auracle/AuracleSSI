@@ -1,4 +1,4 @@
-﻿// FFMPEGReader.h
+﻿ // FFMPEGReader.h
 // author: Johannes Wagner <wagner@hcm-lab.de>
 // created: 2014/04/15
 // Copyright (C) 2007-13 University of Augsburg, Lab for Human Centered Multimedia
@@ -38,6 +38,7 @@
 #include "thread/Timer.h"
 #include "FFMPEGReaderChannel.h"
 #include "FFMPEGAVBuffer.h"
+#include "event/EventAddress.h"
 
 namespace ssi {
 
@@ -66,6 +67,9 @@ public:
 
 		Options () : buffer (1.0), fps (25.0), asr (16000.0), width (640), height (480), ablock (0.01), stream (false), offset (0) {
 
+            setEventSender ("ffmpeg");
+            setEventName ("videoframe");
+
 			setUrl ("");
 
 			addOption ("url", url, SSI_MAX_CHAR, SSI_CHAR, "url (file path or stream address)");
@@ -77,15 +81,29 @@ public:
 			addOption ("ablock", &ablock, 1, SSI_TIME, "audio block size in seconds if no video is available (otherwise will be set to 1/fps)");
 			addOption ("stream", &stream, 1, SSI_BOOL, "set this flag for very fast decoding in streaming applications");
 			addOption ("offset", &offset, 1, SSI_DOUBLE, "offset in seconds");
-		};
+        }
+
+        void setEventSender (const ssi_char_t *sender_name) {
+            if (sender_name) {
+                ssi_strcpy (this->sender_name, sender_name);
+            }
+        }
+
+        void setEventName (const ssi_char_t *events_name) {
+            if (events_name) {
+                ssi_strcpy (this->events_name, events_name);
+            }
+        }
 
 		void setUrl (const ssi_char_t *url) {
 			this->url[0] = '\0';
 			if (url) {
 				ssi_strcpy (this->url, url);
 			}
-		};
+        }
 
+        ssi_char_t sender_name[SSI_MAX_CHAR];
+        ssi_char_t events_name[SSI_MAX_CHAR];
 		ssi_char_t url[SSI_MAX_CHAR];
 		ssi_time_t buffer;
 		ssi_time_t fps, asr;
@@ -116,8 +134,8 @@ public:
 	bool setProvider (const ssi_char_t *name, IProvider *provider);
 	bool connect ();
 	void enter ();
-	bool start () { return Thread::start (); };
-	bool stop () { return Thread::stop (); };
+    bool start () { return Thread::start (); }
+    bool stop () { return Thread::stop (); }
 	void flush ();
 	void run ();
 	bool pushVideoFrame (ssi_size_t n_bytes, ssi_byte_t *frame);
@@ -128,7 +146,21 @@ public:
 		ssi_log_level = level;
 	};
 
+    // Virtual functions inherited from IEventSender < IObject < ISensor
+    //virtual void send_enter () {};
+    virtual bool setEventListener (IEventListener *listener) /*{ return false; }*/;
+    //virtual void send_flush () {};
+    //virtual const ssi_char_t *getEventAddress () { return 0; };
+    virtual const ssi_char_t *getEventAddress () {
+        return _event_address.getAddress ();
+    }
+
 protected:
+
+    // Event listenting
+    ssi_event_t _event;
+    IEventListener *_elistener;
+    EventAddress _event_address;
 
 	FFMPEGReader (const ssi_char_t *file = 0);
 	Options _options;
@@ -139,13 +171,15 @@ protected:
 	MODE::item _mode;
 
 	VideoChannel _video_channel;
+    VideoFrameStampChannel _videoframestamp_channel;
 	AudioChannel _audio_channel;
 	FFMPEGReaderClient *_client;
 	void setVideoProvider(IProvider *provider);
+    void setVideoFrameStampProvider(IProvider *provider);
 	void setAudioProvider(IProvider *provider);
 	void setProvider (IProvider *provider);
 
-	IProvider *_video_provider, *_audio_provider;
+    IProvider *_video_provider, *_videoframestamp_provider, *_audio_provider;
 	ssi_video_params_t _video_format;
 	ssi_time_t _audio_sr;
 	Timer *_timer;
