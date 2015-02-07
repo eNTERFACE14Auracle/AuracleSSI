@@ -1,0 +1,213 @@
+<?xml version="1.0" ?>
+<pipeline ssi-v="1">
+
+	<register>
+		<load name="ssiffmpeg.dll" />
+		<load name="ssiioput.dll" />
+		<load name="ssigraphic.dll" />
+		<load name="ssimodel.dll" />
+		<load name="ssisignal.dll" />
+		<load name="ssicamera.dll"/>
+		<load name="ssievent.dll" />
+		<load name="ssiframe.dll" />
+		<load name="ssimicrosoftkinect.dll"/>
+		<load name="ssitheeyetribe.dll" />
+		<load name="ssiasio.dll" />
+		<load name="ssiaudio.dll" />
+	</register>
+
+	<!-- set framework options -->		
+	<framework console="true" cpos="650,0,600,290"/>		
+
+	<!-- set painter options -->
+	<painter arrange="false" apos="2,2,0,0,600,400"/>	
+
+	<!-- Video readingby ffmpeg  sender_name="ffmpeg" events_name="videoframe" -->
+	<sensor create="ssi_sensor_FFMPEGReader" url="stim\auracle_stimulus_04.mp4"  >		
+		<provider channel="video" pin="video" block="1.0" sender_name="ffmpeg" events_name="videoframe"/>
+		<provider channel="audio" pin="audio" block="1.0"/>
+		<provider channel="videoframestamp" pin="videoframestamp" />
+	</sensor>
+
+
+	<!-- kinect sensor 
+	- turn on trackNearestPerson to always track the nearest person
+	- turn on seatedSkeletonMode if tracked person is seating
+	- turn off showFaceTracking and showBodyTracking to NOT visulaize tracking results in the rgb image
+	-->
+
+	<sensor create="ssi_sensor_MicrosoftKinect" trackNearestPerson="true" seatedSkeletonMode="true" simpleFaceTracking="false" showFaceTracking="false" showBodyTracking="false" nearTrackingMode="true">
+		<provider channel="rgb" pin="rgb"/>
+		<provider channel="depthr" pin="depth"/>
+		<provider channel="au" pin="au"/>
+		<provider channel="head" pin="head"/>
+		<provider channel="skeleton" pin="skel"/>
+		<provider channel="face" pin="face"/>
+		<provider channel="depth" pin="depth2"/>
+		<!-- kinect channel not use
+		<provider channel="skeleton2screen" pin=""/>
+		<provider channel="face3d" pin=""/>
+		<provider channel="depth" pin=""/>
+		<provider channel="su" pin=""/>
+		-->
+	</sensor>
+
+
+
+	<!-- Eyetribe sensor -->
+	<sensor create="ssi_sensor_TheEyeTribe">
+
+		<!-- <provider channel="EyeGaze" pin="eyegaze"/> -->
+		<provider channel="EyeGaze" pin="eyegaze" sender_name="theeyetribe" events_name="calibration"/>
+
+
+
+		<!-- Eyetribe channel not use
+
+#define SSI_THEEYETRIBE_CALIBRATION_PROVIDER_NAME "Calibration"
+#define SSI_THEEYETRIBE_TRACKER_PROVIDER_NAME "Tracker"
+#define SSI_THEEYETRIBE_SCREEN_PROVIDER_NAME "Screen"
+		-->
+	</sensor>
+
+
+	<!-- camera sensor
+	<sensor create="ssi_sensor_Camera" >
+		<provider channel="video" pin="webcam" size="2.0"/>
+	</sensor>
+  -->
+
+
+
+	<!-- visualize Video scale="false"	arrange="1,1,1,-8,-30,1695,953" 
+	<consumer create="ssi_consumer_VideoPainter" name="checking_video" flip="False" move="1,1,620,700,600,250">
+		<input pin="video" frame="1" delta="0"/>
+	</consumer>
+	-->
+	<consumer create="ssi_consumer_VideoPainter" name="video" flip="False"  arrange="1,1,1,1272,-30,1616,938">
+		<input pin="video" frame="1" delta="0"/>
+	</consumer>
+
+
+
+
+	<!-- visualization  
+	
+`	<consumer create="ssi_consumer_VideoPainter" name="webcam">
+		<input pin="webcam" frame="1" delta="0"/>
+	</consumer>
+	-->
+
+	<!-- prepare kinect visualization  -->
+
+	<transformer create="ssi_filter_MicrosoftKinectPainter">	
+		<input pin="rgb" frame="1"/>
+		<xinput size="2">
+			<input pin="skel"/>
+			<input pin="face"/>
+		</xinput>
+		<output pin="rgb_skelface"/>
+	</transformer>	
+	<transformer create="ssi_filter_MicrosoftKinectPainter">	
+		<input pin="depth" frame="1"/>
+		<xinput size="2">
+			<input pin="skel"/>
+			<input pin="face"/>
+		</xinput>
+		<output pin="depth_skelface"/>
+	</transformer>
+
+
+
+
+
+
+	<!-- kinect visualization	-->
+
+		<consumer create="ssi_consumer_VideoPainter" flip="False" mirror="False" name="rgb" move="1,1,0,0,300,225">
+		<input pin="rgb_skelface" frame="1"/>
+	</consumer>
+	<consumer create="ssi_consumer_VideoPainter" flip="False" mirror="False" name="depth" move="1,1,310,0,300,225">
+		<input pin="depth_skelface" frame="1"/>
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="head" size="10" move="1,1,0,290,220,300">
+		<input pin="head" frame="0.1s"/>
+	</consumer>
+	<consumer create="ssi_consumer_SignalPainter" name="au" size="10" move="1,1,1050,290,200,300">
+		<input pin="au" frame="0.1s"/>
+	</consumer>
+
+	<!-- theeyetribe visualization  -->
+	<consumer create="ssi_consumer_SignalPainter" size="10.0" move="1,1,0,700,1200,250">
+		<input pin="eyegaze" frame="0.25s" delta="0"/>
+	</consumer> 
+
+	<!--	
+	<consumer create="ssi_consumer_SignalPainter" size=2.0>
+		<input pin="Screen" frame="0.25s" delta="0"/>
+	</consumer>
+-->
+	<!-- kinect storage -->
+
+	<consumer create="ssi_consumer_FileWriter" path="rec\KIN_au" type="1">
+		<input pin="au" frame="1"/>
+	</consumer>
+
+	<consumer create="ssi_consumer_FileWriter" path="rec\KIN_head" type="1">
+		<input pin="head" frame="1"/>
+	</consumer>
+
+	<consumer create="ssi_consumer_FileWriter" path="rec\KIN_skel" type="1">
+		<input pin="skel" frame="1"/>
+	</consumer>
+
+
+	<!-- kin teststorage -->
+
+
+	<consumer create="ssi_consumer_FFMPEGWriter" url="rec\kin_rgb.mp4">
+		<input pin="rgb" frame="1"/>
+	</consumer>
+
+	<consumer create="ssi_consumer_FFMPEGWriter" url="rec\kin_D.mp4">
+		<input pin="depth2" frame="1"/>
+	</consumer>
+	<!--
+  -->
+
+	<!-- theeyetribe storage 
+  -->
+
+	<consumer create="ssi_consumer_FileWriter" path="rec\ET_eyegaze" type="1">
+		<input pin="eyegaze" frame="1"/>
+	</consumer>
+	<consumer create="ssi_consumer_FileWriter" path="rec\videoframestamp" type="1">
+		<input pin="videoframestamp" frame="1"/>
+	</consumer>
+	<listener
+    create="ssi_listener_FileEventWriter"
+    path="rec\calibrationevents_duringtest">
+		<input listen="calibration@theeyetribe" frame="1"/>
+	</listener>
+
+	<listener
+    create="ssi_listener_FileEventWriter"
+    path="rec\frames">
+		<input listen="videoframe@ffmpeg" frame="0.033s"/>
+	</listener>
+	<!-- playback sound video  
+<consumer create="ssi_consumer_AudioPlayer" option="aplayer">
+  <input pin="audio" frame="0.08s"/>
+</consumer>
+  -->
+	<consumer create="ssi_consumer_AudioAsioPlayer" device="12">
+		<input pin="audio" frame="0.010s" />
+	</consumer>
+	<!-- webcam storage 
+
+	<consumer create="ssi_consumer_FFMPEGWriter" url="rec\webcam.mp4">
+		<input pin="webcam" frame="1"/>
+	</consumer>
+
+	-->
+</pipeline>

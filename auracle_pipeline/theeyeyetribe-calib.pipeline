@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<pipeline>
+	
+	<register>
+		<load name="ssigraphic.dll" />
+		<load name="ssicamera.dll" />
+		<load name="ssievent.dll" />
+		<load name="ssiframe.dll" />
+		<load name="ssiioput.dll" />
+		<load name="ssisignal.dll" />
+		<load name="ssitheeyetribe.dll" />
+		
+	</register>
+	
+	<!-- set framework options -->		
+	<framework console="true" cpos="500,0,700,290"/>	
+	
+	<!-- eyetribe sensor -->
+	<sensor create="ssi_sensor_TheEyeTribe">
+	<!--	<provider channel="EyeGaze" pin="eyegaze"/> -->
+    		<provider channel="EyeGaze" pin="eyegaze" sender_name="theeyetribe" events_name="calibration"/>
+	</sensor>
+	
+
+	<!-- visualization -->	
+	<consumer create="ssi_consumer_SignalPainter" size="4.0" move="1,1,0,700,1200,250">
+		<input pin="eyegaze" frame="0.25s" delta="0"/>
+	</consumer>
+
+<listener
+	create="ssi_listener_FileEventWriter"
+	path="rec\calibrationevents">
+	<input listen="calibration@theeyetribe"/>
+</listener>
+<consumer create="ssi_consumer_FileWriter" path="rec\calib_eyegaze" type="1">
+		<input pin="eyegaze" frame="1"/>
+</consumer>
+</pipeline>
