@@ -18,7 +18,7 @@ This fork packs the following plugins:
  * `asio`: realtime audio playback
  * `ffmpeg`: video playback, modified to provide video frames
  * `microsoftkinect`: Microsoft Kinect sensor
- * `theyetribe`: Eye Tribe eye tracker sensor
+ * `theyetribe`: Eye Tribe eye tracker sensor, modified to provide all data from the EyeTribe server (including calibration)
 
 
 ## Compiling

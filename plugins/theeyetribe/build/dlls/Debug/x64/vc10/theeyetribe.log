@@ -1,16 +1,14 @@
-﻿Build started 26/06/2014 15:05:55.
+﻿Build started 30/06/2014 19:36:14.
      1>Project "C:\Users\Auracle\Documents\openssi-bleedingedge\plugins\theeyetribe\build\dlls\theeyetribe.vcxproj" on node 2 (build target(s)).
        Project file contains ToolsVersion="12.0", which is not supported by this version of MSBuild. Treating the project as if it had ToolsVersion="4.0".
      1>c:\Windows\Microsoft.NET\Framework\v4.0.30319\Microsoft.Common.Targets(1200,9): warning : The referenced project '..\..\libs\ssi.vcxproj' does not exist.
      1>InitializeBuildStatus:
          Creating "Debug\x64\vc10\theeyetribe.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /I..\..\..\..\core\include /I..\..\include /I"C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include" /I"C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\atlmfc\include" /I"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\include" /I"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\\include" /I..\..\..\..\core\include\opencv /I..\..\..\shore\include /Zi /nologo /W3 /WX- /Od /D X64 /D _DEBUG /D _WINDOWS /D _CONSOLE /D _CRT_SECURE_NO_DEPRECATE /D _WINDLL /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\x64\vc10\\" /Fd"Debug\x64\vc10\vc100.pdb" /Gd /TP /errorReport:prompt ..\..\source\ExportMain.cpp ..\..\source\TheEyeTribe.cpp
-         ExportMain.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\x86_amd64\CL.exe /c /I..\..\..\..\core\include /I..\..\include /I"C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include" /I"C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\atlmfc\include" /I"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\include" /I"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\\include" /I..\..\..\..\core\include\opencv /I..\..\..\shore\include /Zi /nologo /W3 /WX- /Od /D X64 /D _DEBUG /D _WINDOWS /D _CONSOLE /D _CRT_SECURE_NO_DEPRECATE /D _WINDLL /Gm- /EHsc /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\x64\vc10\\" /Fd"Debug\x64\vc10\vc100.pdb" /Gd /TP /errorReport:prompt ..\..\source\TheEyeTribe.cpp
          TheEyeTribe.cpp
      1>..\..\source\TheEyeTribe.cpp(215): warning C4244: 'argument' : conversion from 'ssi_time_t' to 'const ssi_real_t', possible loss of data
      1>..\..\source\TheEyeTribe.cpp(254): warning C4267: 'initializing' : conversion from 'size_t' to 'ssi_size_t', possible loss of data
-         Generating Code...
      1>c:\users\auracle\documents\openssi-bleedingedge\plugins\theeyetribe\include\theeyetribe.h(211): warning C4715: 'ssi::TheEyeTribe::getChannel' : not all control paths return a value
        ManifestResourceCompile:
          All outputs are up-to-date.
@@ -32,4 +30,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.26
+Time Elapsed 00:00:04.32
